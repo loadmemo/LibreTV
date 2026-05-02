@@ -62,6 +62,17 @@ localStorage.setItem('doubanEnabled', 'false');
 
     // 初始检查成人API选中状态
     setTimeout(checkAdultAPIsSelected, 100);
+
+    // 来源筛选点击委托
+    const sourceFiltersContainer = document.getElementById('sourceFilters');
+    if (sourceFiltersContainer) {
+        sourceFiltersContainer.addEventListener('click', function(e) {
+            const pill = e.target.closest('.source-filter-pill');
+            if (pill && pill.dataset.sourceValue !== undefined) {
+                filterBySource(pill.dataset.sourceValue);
+            }
+        });
+    }
 });
 
 // 初始化API复选框
@@ -589,10 +600,14 @@ function renderSourceFilters(results) {
 
     if (!toggleDiv || !filtersDiv) return;
 
-    // 构建 pill HTML
-    let html = `<button class="source-filter-pill all-pill active" data-source="all" onclick="filterBySource('all')">全部<span class="pill-count">(${results.length})</span></button>`;
+    // Escape helper for HTML attributes
+    const escapeAttr = (str) => String(str).replace(/[&"]/g, (m) => m === '&' ? '&amp;' : '&quot;');
+
+    // 构建 pill HTML (no inline onclick, use data-source-value)
+    let html = `<button class="source-filter-pill all-pill active" data-source-value="all">全部<span class="pill-count">(${results.length})</span></button>`;
     sources.forEach(([name, count]) => {
-        html += `<button class="source-filter-pill" data-source="${name}" onclick="filterBySource('${name.replace(/'/g, "\\'")}')">${name}<span class="pill-count">(${count})</span></button>`;
+        const safeName = escapeAttr(name);
+        html += `<button class="source-filter-pill" data-source-value="${safeName}">${name}<span class="pill-count">(${count})</span></button>`;
     });
     filtersDiv.innerHTML = html;
     toggleDiv.classList.remove('hidden');
@@ -601,7 +616,7 @@ function renderSourceFilters(results) {
 function filterBySource(source) {
     activeSourceFilter = source;
     document.querySelectorAll('#sourceFilters .source-filter-pill').forEach(p => {
-        p.classList.toggle('active', p.dataset.source === source);
+        p.classList.toggle('active', p.dataset.sourceValue === source);
     });
     renderResultsGrid(allSearchResults);
 }

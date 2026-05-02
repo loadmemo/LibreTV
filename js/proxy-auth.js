@@ -71,7 +71,11 @@ async function addAuthToProxyUrl(url) {
         // 检查URL是否已包含查询参数
         const separator = url.includes('?') ? '&' : '?';
         
-        return `${url}${separator}auth=${encodeURIComponent(hash)}&t=${timestamp}`;
+        const authUrl = `${url}${separator}auth=${encodeURIComponent(hash)}&t=${timestamp}`;
+        
+        document.cookie = `proxyAuth=${encodeURIComponent(hash)}; path=/proxy/; max-age=600; SameSite=Strict`;
+        
+        return authUrl;
     } catch (error) {
         console.error('添加代理鉴权失败:', error);
         return url;

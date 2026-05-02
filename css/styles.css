@@ -1,28 +1,28 @@
 /*
 LibreTV — Global Styles
-Dark-cinema design system with purple accent.
+Dark-cinema design system with indigo accent.
 */
 
 /* ==========================================================================
    Design Tokens (CSS custom properties)
    Existing JS / CSS may reference these by name. Values updated for
-   the purple-accent dark theme.
+   the indigo-accent dark theme.
    ========================================================================== */
 
 :root {
-    --primary-color: #8B5CF6;
-    --primary-light: #A78BFA;
-    --secondary-color: #0F0F0F;
-    --accent-color: #A78BFA;
-    --text-color: #E0E0E0;
-    --text-muted: #808080;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --page-gradient-start: #0F0F0F;
-    --page-gradient-end: #0F0F0F;
-    --card-gradient-start: #1F1F1F;
-    --card-gradient-end: #1F1F1F;
-    --card-accent: rgba(139, 92, 246, 0.12);
-    --card-hover-border: rgba(139, 92, 246, 0.5);
+    --primary-color: #6366F1;
+    --primary-light: #818CF8;
+    --secondary-color: #0B0F1A;
+    --accent-color: #818CF8;
+    --text-color: #E2E8F0;
+    --text-muted: #64748B;
+    --border-color: rgba(255, 255, 255, 0.06);
+    --page-gradient-start: #0B0F1A;
+    --page-gradient-end: #0B0F1A;
+    --card-gradient-start: #1A2035;
+    --card-gradient-end: #1A2035;
+    --card-accent: rgba(99, 102, 241, 0.12);
+    --card-hover-border: rgba(99, 102, 241, 0.5);
 }
 
 /* ==========================================================================
@@ -94,9 +94,9 @@ body {
     background-color: var(--page-gradient-start);
     min-height: 100vh;
     background-image:
-        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(139, 92, 246, 0.07), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 70%, rgba(139, 92, 246, 0.05), transparent),
-        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.02) 0%, transparent 70%);
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(99, 102, 241, 0.07), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 70%, rgba(99, 102, 241, 0.05), transparent),
+        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.02) 0%, transparent 70%);
     background-blend-mode: normal;
     background-size: cover;
 }
@@ -212,8 +212,8 @@ h3, .h3 {
     border-radius: var(--radius-md);
     opacity: 0;
     transition: opacity 0.25s var(--ease-snappy);
-    box-shadow: 0 0 0 1px var(--primary-color),
-                0 0 16px rgba(139, 92, 246, 0.15);
+            box-shadow: 0 0 0 1px var(--primary-color),
+                0 0 16px rgba(99, 102, 241, 0.15);
     pointer-events: none;
     z-index: 1;
 }
@@ -279,7 +279,7 @@ h3, .h3 {
 .settings-panel {
     transform: translateX(100%);
     transition: transform 0.35s var(--ease-snappy);
-    background: rgba(15, 15, 15, 0.85);
+    background: rgba(11, 15, 26, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-left: 1px solid var(--border-color);
@@ -326,7 +326,7 @@ h3, .h3 {
 .search-tag:hover {
     background: var(--card-gradient-end);
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.15);
 }
 
 /* ==========================================================================
@@ -367,16 +367,16 @@ h3, .h3 {
    ========================================================================== */
 
 #episodesGrid button {
-    background: rgba(139, 92, 246, 0.08);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
     transition: all 0.2s var(--ease-snappy);
     border-radius: var(--radius-default);
 }
 
 #episodesGrid button:hover {
-    background: rgba(139, 92, 246, 0.18);
+    background: rgba(99, 102, 241, 0.18);
     border-color: var(--primary-color);
-    box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
 }
 
 /* ==========================================================================
@@ -416,7 +416,7 @@ h3, .h3 {
 #adFilterToggle:checked ~ .toggle-dot,
 #doubanToggle:checked ~ .toggle-dot {
     transform: translateX(1.5rem);
-    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);
 }
 
 #yellowFilterToggle:focus + .toggle-bg,
@@ -425,7 +425,7 @@ h3, .h3 {
 #adFilterToggle:hover + .toggle-bg,
 #doubanToggle:focus + .toggle-bg,
 #doubanToggle:hover + .toggle-bg {
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 /* ==========================================================================
@@ -466,7 +466,7 @@ h3, .h3 {
 }
 
 .form-checkbox:focus {
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 /* ==========================================================================

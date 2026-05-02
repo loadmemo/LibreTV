@@ -623,11 +623,11 @@ function renderResultsGrid(results) {
     if (!results || results.length === 0) {
         resultsDiv.innerHTML = `
             <div class="col-span-full text-center py-16">
-<svg class="mx-auto h-12 w-12 text-[#808080]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3 class="mt-2 text-lg font-medium text-[#808080]">没有找到匹配的结果</h3>
-                <p class="mt-1 text-sm text-[#808080]">${activeSourceFilter !== 'all' ? '请尝试更换来源筛选条件' : '请尝试其他关键词或更换数据源'}</p>
+                <h3 class="mt-2 text-lg font-medium text-gray-400">没有找到匹配的结果</h3>
+                <p class="mt-1 text-sm text-gray-500">${activeSourceFilter !== 'all' ? '请尝试更换来源筛选条件' : '请尝试其他关键词或更换数据源'}</p>
             </div>`;
         return;
     }
@@ -640,7 +640,7 @@ function renderResultsGrid(results) {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;');
         const sourceInfo = item.source_name ?
-            `<span class="bg-[#2A2A2A]/80 text-xs px-2 py-0.5 rounded-full text-[#B0B0B0]">${item.source_name}</span>` : '';
+            `<span class="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded-full border border-white/10">${item.source_name}</span>` : '';
         const sourceCode = item.source_code || '';
 
         const apiUrlAttr = item.api_url ?
@@ -649,31 +649,41 @@ function renderResultsGrid(results) {
         const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
 
         return `
-            <div class="group card-hover rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 h-full"
+            <div class="card-hover bg-[#111] rounded-lg overflow-hidden cursor-pointer transition-all hover:scale-[1.02] h-full shadow-sm hover:shadow-md"
                  onclick="showDetails('${safeId}','${safeName}','${sourceCode}')" ${apiUrlAttr}>
-                <div class="relative aspect-[2/3] overflow-hidden ${!hasCover ? 'flex items-center justify-center bg-[#1F1F1F]' : ''}">
+                <div class="flex h-full">
                     ${hasCover ? `
-                    <img src="${item.vod_pic}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');"
-                         loading="lazy">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300">
-                                <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <div class="relative flex-shrink-0 search-card-img-container">
+                        <img src="${item.vod_pic}" alt="${safeName}"
+                             class="h-full w-full object-cover transition-transform hover:scale-110"
+                             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');"
+                             loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
+                    </div>` : ''}
+
+                    <div class="p-2 flex flex-col flex-grow">
+                        <div class="flex-grow">
+                            <h3 class="font-semibold mb-2 break-words line-clamp-2 ${hasCover ? '' : 'text-center'}" title="${safeName}">${safeName}</h3>
+
+                            <div class="flex flex-wrap ${hasCover ? '' : 'justify-center'} gap-1 mb-2">
+                                ${(item.type_name || '').toString().replace(/</g, '&lt;') ?
+            `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
+                                      ${(item.type_name || '').toString().replace(/</g, '&lt;')}
+                                  </span>` : ''}
+                                ${(item.vod_year || '') ?
+            `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
+                                      ${item.vod_year}
+                                  </span>` : ''}
                             </div>
+                            <p class="text-gray-400 line-clamp-2 overflow-hidden ${hasCover ? '' : 'text-center'} mb-2">
+                                ${(item.vod_remarks || '暂无介绍').toString().replace(/</g, '&lt;')}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-1 pt-1 border-t border-gray-800">
+                            ${sourceInfo ? `<div>${sourceInfo}</div>` : '<div></div>'}
                         </div>
                     </div>
-                    ` : `
-                    <img src="https://via.placeholder.com/300x450?text=无封面" class="w-full h-full object-cover" loading="lazy">
-                    `}
-                    ${item.vod_year ? `<span class="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-white text-[10px] font-semibold px-1.5 py-0.5 rounded">${item.vod_year}</span>` : ''}
-                </div>
-                <div class="p-3">
-                    <h3 class="font-semibold text-sm text-[#E0E0E0] leading-tight truncate" title="${safeName}">${safeName}</h3>
-                    <div class="flex items-center gap-1.5 mt-1.5 text-[11px] text-[#808080]">
-                        ${(item.type_name || '') ? `<span>${(item.type_name || '').toString().replace(/</g, '&lt;')}</span>` : ''}
-                    </div>
-                    ${sourceInfo ? `<div class="mt-2">${sourceInfo}</div>` : ''}
                 </div>
             </div>
         `;

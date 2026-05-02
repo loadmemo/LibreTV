@@ -158,74 +158,65 @@ h3, .h3 {
    ========================================================================== */
 
 .card-hover {
-    border: 1px solid var(--border-color);
-    background: var(--card-gradient-start);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    position: relative;
+    background: linear-gradient(135deg, var(--card-gradient-start), var(--card-gradient-end));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
     overflow: hidden;
-    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
     height: 100%;
-    transition: transform 0.25s var(--ease-snappy),
-                box-shadow 0.25s var(--ease-snappy),
-                border-color 0.25s var(--ease-snappy);
 }
 
 .card-hover .flex-grow {
-    min-height: unset;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
 }
 
-/* Title clamp */
 .card-hover h3 {
-    min-height: unset;
-    max-height: unset;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    min-height: 2.5rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    line-height: 1.3rem;
-    word-break: break-word;
-    hyphens: auto;
-    font-size: 0.95rem;
     margin-bottom: 0.5rem;
     color: var(--text-color);
 }
 
 .card-hover p {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
+    line-height: 1.3;
 }
 
 .card-hover .p-2 {
-    padding: 0.75rem;
-}
-
-/* Hover state — lift + glow */
-.card-hover::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius-md);
-    opacity: 0;
-    transition: opacity 0.25s var(--ease-snappy);
-            box-shadow: 0 0 0 1px var(--primary-color),
-                0 0 16px rgba(99, 102, 241, 0.15);
-    pointer-events: none;
-    z-index: 1;
+    padding: 0.5rem;
 }
 
 .card-hover:hover {
-    border-color: var(--card-hover-border);
-    transform: scale(1.03) translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
-.card-hover:hover::before {
-    opacity: 1;
+/* Fixed image container for search result cards */
+.search-card-img-container {
+    width: 100px;
+    height: 150px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    background-color: var(--card-gradient-start);
+}
+
+.search-card-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* ==========================================================================
@@ -875,23 +866,7 @@ h3, .h3 {
     }
 }
 
-/* ==========================================================================
-   Search Card Thumbnail
-   ========================================================================== */
 
-.search-card-img-container {
-    width: 100px;
-    height: 150px;
-    overflow: hidden;
-    background-color: var(--card-gradient-start);
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-
-.search-card-img-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 
 /* ==========================================================================
    Results Grid

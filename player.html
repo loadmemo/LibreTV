@@ -14,34 +14,80 @@
     <script src="libs/tailwindcss.min.js"></script>
     <style type="text/tailwindcss">
 @theme {
-    --color-surface-base: #0F0F0F;
-    --color-surface-100: #161616;
-    --color-surface-200: #1F1F1F;
-    --color-surface-300: #2A2A2A;
-    --color-surface-400: #333333;
-    --color-accent: #8B5CF6;
-    --color-accent-light: #A78BFA;
-    --color-accent-dark: #7C3AED;
-    --color-text-primary: #E0E0E0;
-    --color-text-secondary: #B0B0B0;
-    --color-text-tertiary: #808080;
+    /* === Surface Colors (Cinema Dark) === */
+    --color-surface-base: #0B0F1A;
+    --color-surface-100: #111827;
+    --color-surface-200: #1A2035;
+    --color-surface-300: #222940;
+    --color-surface-400: #2C3450;
+    --color-surface-500: #363F5C;
+
+    /* === Accent (Indigo) === */
+    --color-accent: #6366F1;
+    --color-accent-light: #818CF8;
+    --color-accent-dark: #4F46E5;
+    --color-accent-glow: rgba(99, 102, 241, 0.5);
+    --color-accent-subtle: rgba(99, 102, 241, 0.08);
+
+    /* === Text === */
+    --color-text-primary: #E2E8F0;
+    --color-text-secondary: #94A3B8;
+    --color-text-tertiary: #64748B;
+
+    /* === Semantic === */
     --color-success: #10B981;
     --color-warning: #F59E0B;
     --color-error: #EF4444;
-    --color-border-subtle: rgba(255, 255, 255, 0.08);
-    --color-border-active: rgba(255, 255, 255, 0.15);
+
+    /* === Borders === */
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-active: rgba(255, 255, 255, 0.1);
+    --color-border-glass: rgba(255, 255, 255, 0.08);
+    --color-border-glass-hover: rgba(99, 102, 241, 0.3);
+
+    /* === Radius === */
     --radius-sm: 6px;
     --radius-default: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
+    --radius-xl: 20px;
     --radius-full: 9999px;
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
-    --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.6);
-    --shadow-glow-accent: 0 0 12px rgba(139, 92, 246, 0.3);
-    --shadow-inset-card: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+    /* === Shadows (Cinema-Grade) === */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.7);
+    --shadow-glow-accent: 0 0 12px rgba(99, 102, 241, 0.35);
+    --shadow-glow-accent-lg: 0 0 30px rgba(99, 102, 241, 0.25), 0 0 60px rgba(99, 102, 241, 0.1);
+    --shadow-player: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 80px rgba(0, 0, 0, 0.3);
+    --shadow-player-hover: 0 0 0 1px rgba(99, 102, 241, 0.15), 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 100px rgba(99, 102, 241, 0.08);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --shadow-glass-lg: 0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --shadow-inset-card: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    /* === Glass Effects === */
+    --glass-blur-sm: blur(12px);
+    --glass-blur-md: blur(24px);
+    --glass-blur-lg: blur(40px);
+    --glass-bg-subtle: rgba(11, 15, 26, 0.7);
+    --glass-bg-medium: rgba(26, 32, 53, 0.85);
+    --glass-bg-strong: rgba(26, 32, 53, 0.92);
+
+    /* === Gradients (Cinema) === */
+    --gradient-surface: linear-gradient(135deg, var(--color-surface-200), var(--color-surface-100));
+    --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    --gradient-glow: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.12), transparent 70%);
+    --gradient-player-overlay: linear-gradient(to bottom, transparent 50%, rgba(11, 15, 26, 0.4));
+    --gradient-text-cinema: linear-gradient(135deg, #E2E8F0 0%, #818CF8 50%, #6366F1 100%);
+
+    /* === Easing === */
     --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* === Noise Texture (base64 inline SVG) === */
+    --noise-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 </style>
     <script src="js/version-check.js"></script>
@@ -57,14 +103,14 @@
     <header class="player-header-fixed p-3 flex items-center gap-3">
         <div class="flex items-center min-w-0">
             <button id="homeButton" type="button" class="flex items-center min-w-0 cursor-pointer home-button">
-                <svg class="w-6 h-6 mr-1.5 text-[#8B5CF6] logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 mr-1.5 text-indigo-500 logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                 </svg>
                 <h1 class="text-lg font-bold gradient-text logo-text">LibreTV</h1>
             </button>
         </div>
-        <h2 id="videoTitle" class="text-sm md:text-base font-medium flex-1 text-center overflow-x-auto whitespace-nowrap truncate custom-title-scroll text-[#B0B0B0]"></h2>
-        <a href="#" id="goBack" onclick="goBack(event)" class="px-3 py-1.5 min-w-0 home-btn rounded-lg transition-all duration-200 flex items-center border border-white/10 bg-[#1F1F1F]/80 hover:bg-[#2A2A2A] hover:border-[#8B5CF6]/50 backdrop-blur-sm">
+                <h2 id="videoTitle" class="text-sm md:text-base font-medium flex-1 text-center overflow-x-auto whitespace-nowrap truncate custom-title-scroll text-gray-400"></h2>
+            <a href="#" id="goBack" onclick="goBack(event)" class="px-3 py-1.5 min-w-0 home-btn rounded-lg transition-all duration-200 flex items-center border border-gray-700/10 bg-gray-900/80 hover:bg-gray-800 hover:border-indigo-500/50 backdrop-blur-sm active:scale-95 hover:-translate-y-0.5">
             <svg class="w-4 h-4 sm:mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 <path d="M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -75,23 +121,24 @@
 
     <!-- 密码验证弹窗 — Glass Modal -->
     <div id="passwordModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-[65] transition-opacity duration-300">
-        <div class="bg-[#1F1F1F]/90 backdrop-blur-xl p-8 rounded-xl w-11/12 max-w-md border border-white/10 max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="flex justify-between items-center mb-6 flex-none">
+        <div class="bg-gray-900/90 backdrop-blur-xl p-8 rounded-xl w-11/12 max-w-md border border-gray-700/10 max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none"></div>
+            <div class="flex justify-between items-center mb-6 flex-none relative z-10">
                 <h2 class="text-2xl font-bold gradient-text">访问验证</h2>
             </div>
-            <div class="mb-6">
-                <p class="text-[#B0B0B0] mb-4 text-sm">请输入密码继续访问</p>
+            <div class="mb-6 relative z-10">
+                <p class="text-gray-400 mb-4 text-sm">请输入密码继续访问</p>
                 <form id="passwordForm" onsubmit="handlePasswordSubmit(); return false;">
                     <input type="text" name="username" id="username" autocomplete="username" style="display:none" tabindex="-1" aria-hidden="true">
-                    <input type="password" id="passwordInput" class="w-full bg-[#0F0F0F] border border-white/10 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20 transition-all duration-200 placeholder:text-[#808080]" placeholder="密码..." autocomplete="new-password">
-                    <button id="passwordSubmitBtn" type="submit" class="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm shadow-lg shadow-[#8B5CF6]/20">提交</button>
+                    <input type="password" id="passwordInput" class="w-full bg-gray-950 border border-gray-700/10 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200 placeholder:text-gray-500" placeholder="密码..." autocomplete="new-password">
+                    <button id="passwordSubmitBtn" type="submit" class="mt-4 w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm shadow-lg shadow-indigo-500/20 active:scale-95 hover:-translate-y-0.5">提交</button>
                 </form>
                 <p id="passwordError" class="text-red-500 mt-2 hidden text-sm">密码错误，请重试</p>
             </div>
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-4">        <!-- 视频播放区 -->
+    <main class="container mx-auto px-4 py-4" style="animation: fadeInScale 0.5s var(--ease-smooth) both;">        <!-- 视频播放区 -->
         <div id="playerContainer" class="player-container mb-4">
             <div class="relative">
                 <div id="player" class="player-placeholder">
@@ -121,16 +168,16 @@
         <!-- 集数导航 -->
         <div class="player-container">
             <div class="flex justify-between items-center my-4">
-                <button onclick="playPreviousEpisode()" id="prevButton" class="px-4 py-2 bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 hover:border-[#8B5CF6]/50 rounded-lg transition-all duration-200 flex items-center">
-                    <svg class="w-4 h-4 mr-1.5 text-[#A78BFA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button onclick="playPreviousEpisode()" id="prevButton" class="px-4 py-2 bg-gray-900 hover:bg-gray-800 border border-gray-700/10 hover:border-indigo-500/50 rounded-lg transition-all duration-200 flex items-center active:scale-95 hover:-translate-y-0.5">
+                    <svg class="w-4 h-4 mr-1.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                     <span class="text-sm">上一集</span>
                 </button>
-                <span class="text-[#B0B0B0] text-sm font-medium" id="episodeInfo">加载中...</span>
-                <button onclick="playNextEpisode()" id="nextButton" class="px-4 py-2 bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 hover:border-[#8B5CF6]/50 rounded-lg transition-all duration-200 flex items-center">
+                <span class="text-gray-400 text-sm font-medium" id="episodeInfo">加载中...</span>
+                <button onclick="playNextEpisode()" id="nextButton" class="px-4 py-2 bg-gray-900 hover:bg-gray-800 border border-gray-700/10 hover:border-indigo-500/50 rounded-lg transition-all duration-200 flex items-center active:scale-95 hover:-translate-y-0.5">
                     <span class="text-sm mr-1.5">下一集</span>
-                    <svg class="w-4 h-4 text-[#A78BFA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
@@ -142,7 +189,7 @@
             <div class="flex flex-wrap justify-end items-center gap-2">
                 <!-- 自动连播开关 - 分组到左边 -->
                 <div class="flex items-center gap-2 flex-shrink-0 mr-auto">
-                    <span class="text-[#B0B0B0] text-sm whitespace-nowrap">自动连播</span>
+                    <span class="text-gray-400 text-sm whitespace-nowrap">自动连播</span>
                     <label class="switch">
                         <input type="checkbox" id="autoplayToggle">
                         <span class="slider"></span>
@@ -152,24 +199,24 @@
                 <!-- 把各种功能按钮放在右侧 - 在小屏幕上各自占一行 -->
                 <div class="flex flex-wrap justify-end gap-2">
                     <!-- 倒序排列按钮 -->
-                    <button onclick="toggleEpisodeOrder()" class="px-3 py-2 min-h-[44px] bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 hover:border-[#8B5CF6]/50 rounded-lg transition-all duration-200 flex items-center gap-1.5 flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#A78BFA]" id="orderIcon" viewBox="0 0 20 20" fill="currentColor">
+                    <button onclick="toggleEpisodeOrder()" class="px-3 py-2 min-h-[44px] bg-gray-900 hover:bg-gray-800 border border-gray-700/10 hover:border-indigo-500/50 rounded-lg transition-all duration-200 flex items-center gap-1.5 flex-shrink-0 active:scale-95 hover:-translate-y-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" id="orderIcon" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clip-rule="evenodd" />
                         </svg>
                         <span id="orderText" class="text-sm">倒序排列</span>
                     </button>
                     
                     <!-- 复制链接按钮 -->
-                    <button title="复制播放链接" onclick="copyLinks()" class="min-w-[44px] min-h-[44px] p-2.5 bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 hover:border-[#8B5CF6]/50 text-white rounded-lg transition-all duration-200 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#A78BFA]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button title="复制播放链接" onclick="copyLinks()" class="min-w-[44px] min-h-[44px] p-2.5 bg-gray-900 hover:bg-gray-800 border border-gray-700/10 hover:border-indigo-500/50 text-white rounded-lg transition-all duration-200 flex items-center justify-center active:scale-95 hover:-translate-y-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 012-2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                         </svg>
                     </button>
                     
                     <!-- 锁定控制按钮 - 始终显示在最右侧 -->
                     <button id="lockToggle" onclick="toggleControlsLock()" title="锁定控制" 
-                            class="min-w-[44px] min-h-[44px] p-2.5 bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 hover:border-[#8B5CF6]/50 text-white rounded-lg transition-all duration-200 flex-shrink-0 flex items-center justify-center">
-                        <svg id="lockIcon" class="w-4 h-4 text-[#A78BFA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="min-w-[44px] min-h-[44px] p-2.5 bg-gray-900 hover:bg-gray-800 border border-gray-700/10 hover:border-indigo-500/50 text-white rounded-lg transition-all duration-200 flex-shrink-0 flex items-center justify-center active:scale-95 hover:-translate-y-0.5">
+                        <svg id="lockIcon" class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <!-- 默认状态：未锁图标 -->
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 11V7a3 3 0 00-6 0v4m-3 4h12v6H6v-6z" />
@@ -184,7 +231,7 @@
             <div class="episode-grid" id="episodesGrid">
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" id="episodesList">
                     <!-- 集数将在这里动态加载 -->
-                    <div class="col-span-full text-center text-[#B0B0B0] py-8">加载中...</div>
+                    <div class="col-span-full text-center text-gray-400 py-8">加载中...</div>
                 </div>
             </div>
         </div>
@@ -198,18 +245,19 @@
         <span id="shortcutText"></span>
     </div>
 
-    <footer class="text-center py-4 text-[#808080] text-xs">
+    <footer class="text-center py-4 text-gray-500 text-xs">
         LibreTV
     </footer>
 
     <!-- 换源模态框 — Glass Overlay -->
     <div id="modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center transition-opacity duration-300 z-[10000]">
-        <div class="bg-[#1F1F1F]/90 backdrop-blur-xl p-8 rounded-xl w-11/12 max-w-4xl border border-white/10 max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="flex justify-between items-center mb-6 flex-none">
+        <div class="bg-gray-900/92 backdrop-blur-2xl p-8 rounded-xl w-11/12 max-w-4xl border border-gray-700/10 max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none"></div>
+            <div class="flex justify-between items-center mb-6 flex-none relative z-10">
                 <h2 id="modalTitle" class="text-2xl font-bold gradient-text break-words pr-4 max-w-[80%]"></h2>
-                <button onclick="closeModal()" class="text-[#B0B0B0] hover:text-white text-2xl transition-colors flex-shrink-0">&times;</button>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl transition-colors flex-shrink-0 hover:rotate-90 duration-300">&times;</button>
             </div>
-            <div id="modalContent" class="overflow-auto flex-1 min-h-0">
+            <div id="modalContent" class="overflow-auto flex-1 min-h-0 relative z-10">
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
                 </div>
             </div>
@@ -218,9 +266,10 @@
 
     <!-- Loading 提示框 — Glass Card -->
     <div id="loading" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[10001]">
-        <div class="bg-[#1F1F1F]/90 backdrop-blur-xl p-8 rounded-xl border border-white/10 flex items-center gap-4 shadow-2xl">
-            <div class="w-8 h-8 border-3 border-white/10 border-t-[#8B5CF6] rounded-full animate-spin"></div>
-            <p class="text-white text-lg font-medium">加载中...</p>
+        <div class="bg-gray-900/92 backdrop-blur-2xl p-8 rounded-xl border border-gray-700/10 flex items-center gap-4 shadow-2xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none"></div>
+            <div class="w-8 h-8 border-3 border-gray-700/10 border-t-indigo-500 rounded-full animate-spin relative z-10"></div>
+            <p class="text-white text-lg font-medium relative z-10">加载中...</p>
         </div>
     </div>
 

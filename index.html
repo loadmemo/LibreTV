@@ -274,7 +274,16 @@
             <!-- 搜索结果：初始隐藏 -->
             <div id="resultsArea" class="w-full hidden">
                 <div class="mx-auto max-w-7xl px-2"> <!-- 添加最大宽度限制并居中 -->
-                    <div class="flex justify-end items-center mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <div id="sourceFilterToggle" class="hidden">
+                            <button onclick="toggleSourceFilter()" class="text-sm text-gray-400 hover:text-white flex items-center gap-1 transition-colors" id="sourceFilterToggleBtn">
+                                <svg class="w-4 h-4 transition-transform" id="sourceFilterIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                                <span>按来源筛选</span>
+                            </button>
+                            <div id="sourceFilters" class="hidden mt-2 flex flex-wrap gap-2"></div>
+                        </div>
                         <div class="text-sm text-gray-400">
                             <span id="searchResultsCount">0</span> 个结果
                         </div>

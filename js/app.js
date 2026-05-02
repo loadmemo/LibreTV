@@ -1,6 +1,9 @@
 // 全局变量
 let selectedAPIs = JSON.parse(localStorage.getItem('selectedAPIs') || '["tyyszy","dyttzy", "bfzy", "ruyi"]'); // 默认选中资源
 let customAPIs = JSON.parse(localStorage.getItem('customAPIs') || '[]'); // 存储自定义API列表
+// 来源筛选相关变量
+let allSearchResults = [];
+let activeSourceFilter = 'all';
 
 // 添加当前播放的集数索引
 let currentEpisodeIndex = 0;
@@ -558,11 +561,153 @@ function setupEventListeners() {
     }
 }
 
+// 来源筛选展开/折叠
+function toggleSourceFilter() {
+    const filtersDiv = document.getElementById('sourceFilters');
+    const icon = document.getElementById('sourceFilterIcon');
+    if (!filtersDiv) return;
+    const isHidden = filtersDiv.classList.contains('hidden');
+    filtersDiv.classList.toggle('hidden');
+    if (icon) {
+        icon.style.transform = isHidden ? 'rotate(180deg)' : '';
+    }
+}
+
+// 渲染来源筛选栏
+function renderSourceFilters(results) {
+    if (!results || results.length === 0) return;
+
+    const sourceMap = {};
+    results.forEach(item => {
+        const name = item.source_name || '未知来源';
+        sourceMap[name] = (sourceMap[name] || 0) + 1;
+    });
+
+    const sources = Object.entries(sourceMap).sort((a, b) => b[1] - a[1]);
+    const toggleDiv = document.getElementById('sourceFilterToggle');
+    const filtersDiv = document.getElementById('sourceFilters');
+
+    if (!toggleDiv || !filtersDiv) return;
+
+    // 构建 pill HTML
+    let html = `<button class="source-filter-pill all-pill active" data-source="all" onclick="filterBySource('all')">全部<span class="pill-count">(${results.length})</span></button>`;
+    sources.forEach(([name, count]) => {
+        html += `<button class="source-filter-pill" data-source="${name}" onclick="filterBySource('${name.replace(/'/g, "\\'")}')">${name}<span class="pill-count">(${count})</span></button>`;
+    });
+    filtersDiv.innerHTML = html;
+    toggleDiv.classList.remove('hidden');
+}
+
+function filterBySource(source) {
+    activeSourceFilter = source;
+    document.querySelectorAll('#sourceFilters .source-filter-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.source === source);
+    });
+    renderResultsGrid(allSearchResults);
+}
+
+// 渲染结果到 DOM（提取渲染逻辑，支持过滤复用）
+function renderResultsGrid(results) {
+    const resultsDiv = document.getElementById('results');
+    const searchResultsCount = document.getElementById('searchResultsCount');
+    if (!resultsDiv) return;
+
+    if (activeSourceFilter !== 'all') {
+        results = results.filter(r => (r.source_name || '未知来源') === activeSourceFilter);
+    }
+
+    if (searchResultsCount) {
+        searchResultsCount.textContent = results.length;
+    }
+
+    if (!results || results.length === 0) {
+        resultsDiv.innerHTML = `
+            <div class="col-span-full text-center py-16">
+                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="mt-2 text-lg font-medium text-gray-400">没有找到匹配的结果</h3>
+                <p class="mt-1 text-sm text-gray-500">${activeSourceFilter !== 'all' ? '请尝试更换来源筛选条件' : '请尝试其他关键词或更换数据源'}</p>
+            </div>`;
+        return;
+    }
+
+    // 复用原有的卡片模板
+    const safeResults = results.map(item => {
+        const safeId = item.vod_id ? item.vod_id.toString().replace(/[^\w-]/g, '') : '';
+        const safeName = (item.vod_name || '').toString()
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+        const sourceInfo = item.source_name ?
+            `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${item.source_name}</span>` : '';
+        const sourceCode = item.source_code || '';
+
+        const apiUrlAttr = item.api_url ?
+            `data-api-url="${item.api_url.replace(/"/g, '&quot;')}"` : '';
+
+        const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
+
+        return `
+            <div class="card-hover bg-[#111] rounded-lg overflow-hidden cursor-pointer transition-all hover:scale-[1.02] h-full shadow-sm hover:shadow-md"
+                 onclick="showDetails('${safeId}','${safeName}','${sourceCode}')" ${apiUrlAttr}>
+                <div class="flex h-full">
+                    ${hasCover ? `
+                    <div class="relative flex-shrink-0 search-card-img-container">
+                        <img src="${item.vod_pic}" alt="${safeName}"
+                             class="h-full w-full object-cover transition-transform hover:scale-110"
+                             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');"
+                             loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
+                    </div>` : ''}
+
+                    <div class="p-2 flex flex-col flex-grow">
+                        <div class="flex-grow">
+                            <h3 class="font-semibold mb-2 break-words line-clamp-2 ${hasCover ? '' : 'text-center'}" title="${safeName}">${safeName}</h3>
+
+                            <div class="flex flex-wrap ${hasCover ? '' : 'justify-center'} gap-1 mb-2">
+                                ${(item.type_name || '').toString().replace(/</g, '&lt;') ?
+            `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
+                                      ${(item.type_name || '').toString().replace(/</g, '&lt;')}
+                                  </span>` : ''}
+                                ${(item.vod_year || '') ?
+            `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
+                                      ${item.vod_year}
+                                  </span>` : ''}
+                            </div>
+                            <p class="text-gray-400 line-clamp-2 overflow-hidden ${hasCover ? '' : 'text-center'} mb-2">
+                                ${(item.vod_remarks || '暂无介绍').toString().replace(/</g, '&lt;')}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-1 pt-1 border-t border-gray-800">
+                            ${sourceInfo ? `<div>${sourceInfo}</div>` : '<div></div>'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    resultsDiv.innerHTML = safeResults;
+}
+
 // 重置搜索区域
 function resetSearchArea() {
-    // 清理搜索结果
+    // 清理搜索结果和筛选状态
     document.getElementById('results').innerHTML = '';
     document.getElementById('searchInput').value = '';
+    allSearchResults = [];
+    activeSourceFilter = 'all';
+    const toggleDiv = document.getElementById('sourceFilterToggle');
+    if (toggleDiv) toggleDiv.classList.add('hidden');
+    const filtersDiv = document.getElementById('sourceFilters');
+    if (filtersDiv) {
+        filtersDiv.classList.add('hidden');
+        filtersDiv.innerHTML = '';
+    }
+    const icon = document.getElementById('sourceFilterIcon');
+    if (icon) icon.style.transform = '';
 
     // 恢复搜索区域的样式
     document.getElementById('searchArea').classList.add('flex-1');
@@ -728,76 +873,10 @@ async function search() {
             });
         }
 
-        // 添加XSS保护，使用textContent和属性转义
-        const safeResults = allResults.map(item => {
-            const safeId = item.vod_id ? item.vod_id.toString().replace(/[^\w-]/g, '') : '';
-            const safeName = (item.vod_name || '').toString()
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-            const sourceInfo = item.source_name ?
-                `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${item.source_name}</span>` : '';
-            const sourceCode = item.source_code || '';
-
-            // 添加API URL属性，用于详情获取
-            const apiUrlAttr = item.api_url ?
-                `data-api-url="${item.api_url.replace(/"/g, '&quot;')}"` : '';
-
-            // 修改为水平卡片布局，图片在左侧，文本在右侧，并优化样式
-            const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
-
-            return `
-                <div class="card-hover bg-[#111] rounded-lg overflow-hidden cursor-pointer transition-all hover:scale-[1.02] h-full shadow-sm hover:shadow-md" 
-                     onclick="showDetails('${safeId}','${safeName}','${sourceCode}')" ${apiUrlAttr}>
-                    <div class="flex h-full">
-                        ${hasCover ? `
-                        <div class="relative flex-shrink-0 search-card-img-container">
-                            <img src="${item.vod_pic}" alt="${safeName}" 
-                                 class="h-full w-full object-cover transition-transform hover:scale-110" 
-                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');" 
-                                 loading="lazy">
-                            <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
-                        </div>` : ''}
-                        
-                        <div class="p-2 flex flex-col flex-grow">
-                            <div class="flex-grow">
-                                <h3 class="font-semibold mb-2 break-words line-clamp-2 ${hasCover ? '' : 'text-center'}" title="${safeName}">${safeName}</h3>
-                                
-                                <div class="flex flex-wrap ${hasCover ? '' : 'justify-center'} gap-1 mb-2">
-                                    ${(item.type_name || '').toString().replace(/</g, '&lt;') ?
-                    `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
-                                          ${(item.type_name || '').toString().replace(/</g, '&lt;')}
-                                      </span>` : ''}
-                                    ${(item.vod_year || '') ?
-                    `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
-                                          ${item.vod_year}
-                                      </span>` : ''}
-                                </div>
-                                <p class="text-gray-400 line-clamp-2 overflow-hidden ${hasCover ? '' : 'text-center'} mb-2">
-                                    ${(item.vod_remarks || '暂无介绍').toString().replace(/</g, '&lt;')}
-                                </p>
-                            </div>
-                            
-                            <div class="flex justify-between items-center mt-1 pt-1 border-t border-gray-800">
-                                ${sourceInfo ? `<div>${sourceInfo}</div>` : '<div></div>'}
-                                <!-- 接口名称过长会被挤变形
-                                <div>
-                                    <span class="text-gray-500 flex items-center hover:text-blue-400 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        </svg>
-                                        播放
-                                    </span>
-                                </div>
-                                -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        resultsDiv.innerHTML = safeResults;
+        allSearchResults = allResults;
+        activeSourceFilter = 'all';
+        renderSourceFilters(allResults);
+        renderResultsGrid(allResults);
     } catch (error) {
         console.error('搜索错误:', error);
         if (error.name === 'AbortError') {

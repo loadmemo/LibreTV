@@ -75,8 +75,14 @@ export async function onRequest(context) {
     // 验证代理请求的鉴权
     async function validateAuth(request, env) {
         const url = new URL(request.url);
-        const authHash = url.searchParams.get('auth');
+        let authHash = url.searchParams.get('auth');
         const timestamp = url.searchParams.get('t');
+
+        if (!authHash) {
+            const cookie = request.headers.get('cookie') || '';
+            const match = cookie.match(/proxyAuth=([^;]+)/);
+            if (match) authHash = decodeURIComponent(match[1]);
+        }
         
         // 获取服务器端密码
         const serverPassword = env.PASSWORD;

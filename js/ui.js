@@ -1,3 +1,17 @@
+// 关闭所有侧边面板及遮罩层
+function closeAllPanels() {
+    const settingsPanel = document.getElementById('settingsPanel');
+    const historyPanel = document.getElementById('historyPanel');
+    const overlay = document.getElementById('panelOverlay');
+
+    if (settingsPanel) settingsPanel.classList.remove('show');
+    if (historyPanel) historyPanel.classList.remove('show');
+    if (overlay) {
+        overlay.classList.add('opacity-0');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+    }
+}
+
 // UI相关函数
 function toggleSettings(e) {
     // 强化的密码保护校验 - 防止绕过
@@ -36,7 +50,7 @@ function showToast(message, type = 'error') {
     if (!toast) {
         toast = document.createElement('div');
         toast.id = 'toast';
-        toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 z-50 opacity-0';
+        toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-xl backdrop-blur-xl border transform transition-all duration-300 z-50 opacity-0';
         toast.style = 'z-index: 2147483647'
         toastMessage = document.createElement('p');
         toastMessage.id = 'toastMessage';
@@ -67,14 +81,14 @@ function showNextToast() {
     const toastMessage = document.getElementById('toastMessage');
 
     const bgColors = {
-        'error': 'bg-red-500',
-        'success': 'bg-green-500',
-        'info': 'bg-blue-500',
-        'warning': 'bg-yellow-500'
+        'error': 'bg-[#EF4444]/20 border-[#EF4444]/50',
+        'success': 'bg-[#10B981]/20 border-[#10B981]/50',
+        'info': 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50',
+        'warning': 'bg-[#F59E0B]/20 border-[#F59E0B]/50'
     };
 
     const bgColor = bgColors[type] || bgColors.error;
-    toast.className = `fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${bgColor} text-white z-50`;
+    toast.className = `fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-xl backdrop-blur-xl border ${bgColor} text-white z-50`;
     toastMessage.textContent = message;
 
     // 显示提示
@@ -228,8 +242,8 @@ function renderSearchHistory() {
     // 创建一个包含标题和清除按钮的行
     historyContainer.innerHTML = `
         <div class="flex justify-between items-center w-full mb-2">
-            <div class="text-gray-500">最近搜索:</div>
-            <button id="clearHistoryBtn" class="text-gray-500 hover:text-white transition-colors"
+<div class="text-[#808080]">最近搜索:</div>
+                <button id="clearHistoryBtn" class="text-[#808080] hover:text-white transition-colors"
                     onclick="clearSearchHistory()" aria-label="清除搜索历史">
                 清除搜索历史
             </button>
@@ -245,7 +259,7 @@ function renderSearchHistory() {
 
         // 添加删除按钮
         const deleteButton = document.createElement('span');
-        deleteButton.className = 'pl-1 text-gray-500 hover:text-red-500 transition-colors';
+        deleteButton.className = 'pl-1 text-[#808080] hover:text-red-500 transition-colors';
         deleteButton.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
         deleteButton.onclick = function(e) {
             // 阻止事件冒泡，避免触发搜索
@@ -386,7 +400,7 @@ function loadViewingHistory() {
     const history = getViewingHistory();
 
     if (history.length === 0) {
-        historyList.innerHTML = `<div class="text-center text-gray-500 py-8">暂无观看记录</div>`;
+        historyList.innerHTML = `<div class="text-center text-[#808080] py-8">暂无观看记录</div>`;
         return;
     }
 
@@ -412,7 +426,7 @@ function loadViewingHistory() {
             const syncStatus = item.lastSyncTime ?
                 `<span class="text-green-400 text-xs" title="剧集列表已同步">✓</span>` :
                 `<span class="text-yellow-400 text-xs" title="使用缓存数据">⚠</span>`;
-            episodeInfoHtml = `<span class="text-xs text-gray-400">共${totalEpisodes}集 ${syncStatus}</span>`;
+            episodeInfoHtml = `<span class="text-xs text-[#808080]">共${totalEpisodes}集 ${syncStatus}</span>`;
         }
 
         // 格式化进度信息
@@ -439,7 +453,7 @@ function loadViewingHistory() {
         return `
             <div class="history-item cursor-pointer relative group" onclick="playFromHistory('${item.url}', '${safeTitle}', ${item.episodeIndex || 0}, ${item.playbackPosition || 0})">
                 <button onclick="event.stopPropagation(); deleteHistoryItem('${safeURL}')"
-                        class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-red-400 p-1 rounded-full hover:bg-gray-800 z-10"
+                        class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[#808080] hover:text-[#EF4444] p-1 rounded-full hover:bg-[#333] z-10"
                         title="删除记录">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -821,17 +835,17 @@ function clearLocalStorage() {
     modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-40';
 
     modal.innerHTML = `
-        <div class="bg-[#191919] rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
-            <button id="closeBoxModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">&times;</button>
+        <div class="bg-[#1F1F1F]/95 backdrop-blur-xl border border-white/10 rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
+            <button id="closeBoxModal" class="absolute top-4 right-4 text-[#808080] hover:text-white text-xl">&times;</button>
 
             <h3 class="text-xl font-bold text-red-500 mb-4">警告</h3>
 
             <div class="mb-0">
-                <div class="text-sm font-medium text-gray-300">确定要清除页面缓存吗？</div>
-                <div class="text-sm font-medium text-gray-300 mb-4">此功能会删除你的观看记录、自定义 API 接口和 Cookie，<scan class="text-red-500 font-bold">此操作不可恢复！</scan></div>
-                <div class="flex justify-end space-x-2">
-                    <button id="confirmBoxModal" class="ml-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-1 rounded">确定</button>
-                    <button id="cancelBoxModal" class="ml-2 bg-pink-600 hover:bg-pink-700 text-white px-4 py-1 rounded">取消</button>
+<div class="text-sm font-medium text-[#B0B0B0]">确定要清除页面缓存吗？</div>
+                <div class="text-sm font-medium text-[#B0B0B0] mb-4">此功能会删除你的观看记录、自定义 API 接口和 Cookie，<scan class="text-red-500 font-bold">此操作不可恢复！</scan></div>
+
+                <button id="confirmBoxModal" class="ml-2 bg-[#2A2A2A] hover:bg-[#333] text-white px-4 py-1 rounded">确定</button>
+                    <button id="cancelBoxModal" class="ml-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-4 py-1 rounded">取消</button>
                 </div>
             </div>
         </div>`;
@@ -859,13 +873,13 @@ function clearLocalStorage() {
         }
 
         modal.innerHTML = `
-            <div class="bg-[#191919] rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
-                <button id="closeBoxModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">&times;</button>
+        <div class="bg-[#1F1F1F]/95 backdrop-blur-xl border border-white/10 rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
+            <button id="closeBoxModal" class="absolute top-4 right-4 text-[#808080] hover:text-white text-xl">&times;</button>
 
                 <h3 class="text-xl font-bold text-white mb-4">提示</h3>
 
                 <div class="mb-4">
-                    <div class="text-sm font-medium text-gray-300 mb-4">页面缓存和Cookie已清除，<span id="countdown">3</span> 秒后自动刷新本页面。</div>
+                    <div class="text-sm font-medium text-[#B0B0B0] mb-4">页面缓存和Cookie已清除，<span id="countdown">3</span> 秒后自动刷新本页面。</div>
                 </div>
             </div>`;
 
@@ -910,11 +924,12 @@ function showImportBox(fun) {
     modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-40';
 
     modal.innerHTML = `
-        <div class="bg-[#191919] rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
-            <button id="closeBoxModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">&times;</button>
+        <div class="bg-[#1F1F1F]/95 backdrop-blur-xl border border-white/10 rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
+            <button id="closeBoxModal" class="absolute top-4 right-4 text-[#808080] hover:text-white text-xl">&times;</button>
+
 
             <div class="m-4">
-                <div id="dropZone" class="w-full py-9 bg-[#111] rounded-2xl border border-gray-300 gap-3 grid border-dashed">
+                <div id="dropZone" class="w-full py-9 bg-[#1F1F1F] rounded-2xl border border-white/10 gap-3 grid border-dashed">
                     <div class="grid gap-1">
                         <svg class="mx-auto" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="File">
@@ -927,9 +942,9 @@ function showImportBox(fun) {
                     <div class="flex items-center justify-center gap-2">
                         <label>
                             <input type="file" id="ChooseFile" hidden />
-                            <div class="flex w-28 h-9 px-2 flex-col bg-pink-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">选择文件</div>
+                            <div class="flex w-28 h-9 px-2 flex-col bg-[#8B5CF6] rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">选择文件</div>
                         </label>
-                        <button onclick="importConfigFromUrl()" class="flex w-28 h-9 px-2 flex-col bg-blue-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">从URL导入</button>
+                        <button onclick="importConfigFromUrl()" class="flex w-28 h-9 px-2 flex-col bg-[#8B5CF6] rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">从URL导入</button>
                     </div>
                     </div>
                 </div>
@@ -957,11 +972,11 @@ function showImportBox(fun) {
 
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        dropZone.classList.add('border-blue-500');
+        dropZone.classList.add('border-[#8B5CF6]');
     });
 
     dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('border-blue-500');
+        dropZone.classList.remove('border-[#8B5CF6]');
     });
 
     dropZone.addEventListener('drop', (e) => {

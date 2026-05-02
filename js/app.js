@@ -89,10 +89,10 @@ function initAPICheckboxes() {
         checkbox.className = 'flex items-center';
         checkbox.innerHTML = `
             <input type="checkbox" id="api_${apiKey}" 
-                   class="form-checkbox h-3 w-3 text-blue-600 bg-[#222] border border-[#333]" 
+                   class="form-checkbox h-3 w-3 text-[#8B5CF6] bg-[#2A2A2A] border border-white/10" 
                    ${checked ? 'checked' : ''} 
                    data-api="${apiKey}">
-            <label for="api_${apiKey}" class="ml-1 text-xs text-gray-400 truncate">${api.name}</label>
+            <label for="api_${apiKey}" class="ml-1 text-xs text-[#808080] truncate">${api.name}</label>
         `;
         normaldiv.appendChild(checkbox);
 
@@ -141,9 +141,9 @@ function addAdultAPI() {
             checkbox.className = 'flex items-center';
             checkbox.innerHTML = `
                 <input type="checkbox" id="api_${apiKey}" 
-                       class="form-checkbox h-3 w-3 text-blue-600 bg-[#222] border border-[#333] api-adult" 
-                       ${checked ? 'checked' : ''} 
-                       data-api="${apiKey}">
+class="form-checkbox h-3 w-3 text-[#8B5CF6] bg-[#2A2A2A] border border-white/10 api-adult" 
+                   ${checked ? 'checked' : ''} 
+                   data-api="${apiKey}">
                 <label for="api_${apiKey}" class="ml-1 text-xs text-pink-400 truncate">${api.name}</label>
             `;
             adultdiv.appendChild(checkbox);
@@ -215,34 +215,34 @@ function renderCustomAPIsList() {
     if (!container) return;
 
     if (customAPIs.length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-500 text-center my-2">未添加自定义API</p>';
+        container.innerHTML = '<p class="text-xs text-[#808080] text-center my-2">未添加自定义API</p>';
         return;
     }
 
     container.innerHTML = '';
     customAPIs.forEach((api, index) => {
         const apiItem = document.createElement('div');
-        apiItem.className = 'flex items-center justify-between p-1 mb-1 bg-[#222] rounded';
+        apiItem.className = 'flex items-center justify-between p-1 mb-1 bg-[#2A2A2A] rounded';
         const textColorClass = api.isAdult ? 'text-pink-400' : 'text-white';
         const adultTag = api.isAdult ? '<span class="text-xs text-pink-400 mr-1">(18+)</span>' : '';
         // 新增 detail 地址显示
-        const detailLine = api.detail ? `<div class="text-xs text-gray-400 truncate">detail: ${api.detail}</div>` : '';
+        const detailLine = api.detail ? `<div class="text-xs text-[#808080] truncate">detail: ${api.detail}</div>` : '';
         apiItem.innerHTML = `
             <div class="flex items-center flex-1 min-w-0">
                 <input type="checkbox" id="custom_api_${index}" 
-                       class="form-checkbox h-3 w-3 text-blue-600 mr-1 ${api.isAdult ? 'api-adult' : ''}" 
+                       class="form-checkbox h-3 w-3 text-[#8B5CF6] mr-1 ${api.isAdult ? 'api-adult' : ''}" 
                        ${selectedAPIs.includes('custom_' + index) ? 'checked' : ''} 
                        data-custom-index="${index}">
                 <div class="flex-1 min-w-0">
                     <div class="text-xs font-medium ${textColorClass} truncate">
                         ${adultTag}${api.name}
                     </div>
-                    <div class="text-xs text-gray-500 truncate">${api.url}</div>
+                    <div class="text-xs text-[#808080] truncate">${api.url}</div>
                     ${detailLine}
                 </div>
             </div>
             <div class="flex items-center">
-                <button class="text-blue-500 hover:text-blue-700 text-xs px-1" onclick="editCustomApi(${index})">✎</button>
+                <button class="text-[#8B5CF6] hover:text-[#7C3AED] text-xs px-1" onclick="editCustomApi(${index})">✎</button>
                 <button class="text-red-500 hover:text-red-700 text-xs px-1" onclick="removeCustomApi(${index})">✕</button>
             </div>
         `;
@@ -268,8 +268,8 @@ function editCustomApi(index) {
         form.classList.remove('hidden');
         const buttonContainer = form.querySelector('div:last-child');
         buttonContainer.innerHTML = `
-            <button onclick="updateCustomApi(${index})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">更新</button>
-            <button onclick="cancelEditCustomApi()" class="bg-[#444] hover:bg-[#555] text-white px-3 py-1 rounded text-xs">取消</button>
+            <button onclick="updateCustomApi(${index})" class="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-3 py-1 rounded text-xs">更新</button>
+            <button onclick="cancelEditCustomApi()" class="bg-[#2A2A2A] hover:bg-[#333] text-white px-3 py-1 rounded text-xs">取消</button>
         `;
     }
 }
@@ -329,8 +329,8 @@ function restoreAddCustomApiButtons() {
     const form = document.getElementById('addCustomApiForm');
     const buttonContainer = form.querySelector('div:last-child');
     buttonContainer.innerHTML = `
-        <button onclick="addCustomApi()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">添加</button>
-        <button onclick="cancelAddCustomApi()" class="bg-[#444] hover:bg-[#555] text-white px-3 py-1 rounded text-xs">取消</button>
+        <button onclick="addCustomApi()" class="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-3 py-1 rounded text-xs">添加</button>
+        <button onclick="cancelAddCustomApi()" class="bg-[#2A2A2A] hover:bg-[#333] text-white px-3 py-1 rounded text-xs">取消</button>
     `;
 }
 
@@ -623,11 +623,11 @@ function renderResultsGrid(results) {
     if (!results || results.length === 0) {
         resultsDiv.innerHTML = `
             <div class="col-span-full text-center py-16">
-                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+<svg class="mx-auto h-12 w-12 text-[#808080]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
                 </svg>
-                <h3 class="mt-2 text-lg font-medium text-gray-400">没有找到匹配的结果</h3>
-                <p class="mt-1 text-sm text-gray-500">${activeSourceFilter !== 'all' ? '请尝试更换来源筛选条件' : '请尝试其他关键词或更换数据源'}</p>
+                <h3 class="mt-2 text-lg font-medium text-[#808080]">没有找到匹配的结果</h3>
+                <p class="mt-1 text-sm text-[#808080]">${activeSourceFilter !== 'all' ? '请尝试更换来源筛选条件' : '请尝试其他关键词或更换数据源'}</p>
             </div>`;
         return;
     }
@@ -640,7 +640,7 @@ function renderResultsGrid(results) {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;');
         const sourceInfo = item.source_name ?
-            `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${item.source_name}</span>` : '';
+            `<span class="bg-[#2A2A2A]/80 text-xs px-2 py-0.5 rounded-full text-[#B0B0B0]">${item.source_name}</span>` : '';
         const sourceCode = item.source_code || '';
 
         const apiUrlAttr = item.api_url ?
@@ -649,41 +649,31 @@ function renderResultsGrid(results) {
         const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
 
         return `
-            <div class="card-hover bg-[#111] rounded-lg overflow-hidden cursor-pointer transition-all hover:scale-[1.02] h-full shadow-sm hover:shadow-md"
+            <div class="group card-hover rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 h-full"
                  onclick="showDetails('${safeId}','${safeName}','${sourceCode}')" ${apiUrlAttr}>
-                <div class="flex h-full">
+                <div class="relative aspect-[2/3] overflow-hidden ${!hasCover ? 'flex items-center justify-center bg-[#1F1F1F]' : ''}">
                     ${hasCover ? `
-                    <div class="relative flex-shrink-0 search-card-img-container">
-                        <img src="${item.vod_pic}" alt="${safeName}"
-                             class="h-full w-full object-cover transition-transform hover:scale-110"
-                             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');"
-                             loading="lazy">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
-                    </div>` : ''}
-
-                    <div class="p-2 flex flex-col flex-grow">
-                        <div class="flex-grow">
-                            <h3 class="font-semibold mb-2 break-words line-clamp-2 ${hasCover ? '' : 'text-center'}" title="${safeName}">${safeName}</h3>
-
-                            <div class="flex flex-wrap ${hasCover ? '' : 'justify-center'} gap-1 mb-2">
-                                ${(item.type_name || '').toString().replace(/</g, '&lt;') ?
-            `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
-                                      ${(item.type_name || '').toString().replace(/</g, '&lt;')}
-                                  </span>` : ''}
-                                ${(item.vod_year || '') ?
-            `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
-                                      ${item.vod_year}
-                                  </span>` : ''}
+                    <img src="${item.vod_pic}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');"
+                         loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300">
+                                <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </div>
-                            <p class="text-gray-400 line-clamp-2 overflow-hidden ${hasCover ? '' : 'text-center'} mb-2">
-                                ${(item.vod_remarks || '暂无介绍').toString().replace(/</g, '&lt;')}
-                            </p>
-                        </div>
-
-                        <div class="flex justify-between items-center mt-1 pt-1 border-t border-gray-800">
-                            ${sourceInfo ? `<div>${sourceInfo}</div>` : '<div></div>'}
                         </div>
                     </div>
+                    ` : `
+                    <img src="https://via.placeholder.com/300x450?text=无封面" class="w-full h-full object-cover" loading="lazy">
+                    `}
+                    ${item.vod_year ? `<span class="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-white text-[10px] font-semibold px-1.5 py-0.5 rounded">${item.vod_year}</span>` : ''}
+                </div>
+                <div class="p-3">
+                    <h3 class="font-semibold text-sm text-[#E0E0E0] leading-tight truncate" title="${safeName}">${safeName}</h3>
+                    <div class="flex items-center gap-1.5 mt-1.5 text-[11px] text-[#808080]">
+                        ${(item.type_name || '') ? `<span>${(item.type_name || '').toString().replace(/</g, '&lt;')}</span>` : ''}
+                    </div>
+                    ${sourceInfo ? `<div class="mt-2">${sourceInfo}</div>` : ''}
                 </div>
             </div>
         `;
@@ -834,12 +824,11 @@ async function search() {
         if (!allResults || allResults.length === 0) {
             resultsDiv.innerHTML = `
                 <div class="col-span-full text-center py-16">
-                    <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 class="mt-2 text-lg font-medium text-gray-400">没有找到匹配的结果</h3>
-                    <p class="mt-1 text-sm text-gray-500">请尝试其他关键词或更换数据源</p>
+<svg class="mx-auto h-12 w-12 text-[#808080]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                </svg>
+                <h3 class="mt-2 text-lg font-medium text-[#808080]">没有找到匹配的结果</h3>
+                <p class="mt-1 text-sm text-[#808080]">请尝试其他关键词或更换数据源</p>
                 </div>
             `;
             hideLoading();
@@ -985,7 +974,7 @@ async function showDetails(id, vod_name, sourceCode) {
 
         // 显示来源信息
         const sourceName = data.videoInfo && data.videoInfo.source_name ?
-            ` <span class="text-sm font-normal text-gray-400">(${data.videoInfo.source_name})</span>` : '';
+            ` <span class="text-sm font-normal text-[#808080]">(${data.videoInfo.source_name})</span>` : '';
 
         // 不对标题进行截断处理，允许完整显示
         modalTitle.innerHTML = `<span class="break-words">${vod_name || '未知视频'}</span>${sourceName}`;
@@ -1030,16 +1019,16 @@ async function showDetails(id, vod_name, sourceCode) {
                 ${detailInfoHtml}
                 <div class="flex flex-wrap items-center justify-between mb-4 gap-2">
                     <div class="flex items-center gap-2">
-                        <button onclick="toggleEpisodeOrder('${sourceCode}', '${id}')" 
-                                class="px-3 py-1.5 bg-[#333] hover:bg-[#444] border border-[#444] rounded text-sm transition-colors flex items-center gap-1">
+                        <button onclick="toggleEpisodeOrder('${sourceCode}', '${id}')"
+                                class="px-3 py-1.5 bg-[#2A2A2A] hover:bg-[#333] border border-[rgba(255,255,255,0.1)] rounded text-sm transition-colors flex items-center gap-1">
                             <svg class="w-4 h-4 transform ${episodesReversed ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                             </svg>
                             <span>${episodesReversed ? '正序排列' : '倒序排列'}</span>
                         </button>
-                        <span class="text-gray-400 text-sm">共 ${data.episodes.length} 集</span>
+                        <span class="text-[#808080] text-sm">共 ${data.episodes.length} 集</span>
                     </div>
-                    <button onclick="copyLinks()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition-colors">
+                    <button onclick="copyLinks()" class="px-3 py-1.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded text-sm transition-colors">
                         复制链接
                     </button>
                 </div>
@@ -1050,8 +1039,11 @@ async function showDetails(id, vod_name, sourceCode) {
         } else {
             modalContent.innerHTML = `
                 <div class="text-center py-8">
-                    <div class="text-red-400 mb-2">❌ 未找到播放资源</div>
-                    <div class="text-gray-500 text-sm">该视频可能暂时无法播放，请尝试其他视频</div>
+                    <div class="text-[#EF4444] mb-2 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        未找到播放资源
+                    </div>
+                    <div class="text-[#808080] text-sm">该视频可能暂时无法播放，请尝试其他视频</div>
                 </div>
             `;
         }
@@ -1178,7 +1170,7 @@ function renderEpisodes(vodName, sourceCode, vodId) {
         const realIndex = episodesReversed ? currentEpisodes.length - 1 - index : index;
         return `
             <button id="episode-${realIndex}" onclick="playVideo('${episode}','${vodName.replace(/"/g, '&quot;')}', '${sourceCode}', ${realIndex}, '${vodId}')" 
-                    class="px-4 py-2 bg-[#222] hover:bg-[#333] border border-[#333] rounded-lg transition-colors text-center episode-btn">
+                    class="px-4 py-2 bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 rounded-lg transition-colors text-center episode-btn">
                 ${realIndex + 1}
             </button>
         `;
@@ -1229,19 +1221,19 @@ async function importConfigFromUrl() {
     modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-40';
 
     modal.innerHTML = `
-        <div class="bg-[#191919] rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
-            <button id="closeUrlModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">&times;</button>
+        <div class="bg-[#1F1F1F]/95 backdrop-blur-xl border border-white/10 rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
+            <button id="closeUrlModal" class="absolute top-4 right-4 text-[#808080] hover:text-white text-xl">&times;</button>
             
             <h3 class="text-xl font-bold mb-4">从URL导入配置</h3>
             
             <div class="mb-4">
                 <input type="text" id="configUrl" placeholder="输入配置文件URL" 
-                       class="w-full px-3 py-2 bg-[#222] border border-[#333] rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                       class="w-full px-3 py-2 bg-[#2A2A2A] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-[#8B5CF6]">
             </div>
             
             <div class="flex justify-end space-x-2">
-                <button id="confirmUrlImport" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">导入</button>
-                <button id="cancelUrlImport" class="bg-[#444] hover:bg-[#555] text-white px-4 py-2 rounded">取消</button>
+                <button id="confirmUrlImport" class="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-4 py-2 rounded">导入</button>
+                <button id="cancelUrlImport" class="bg-[#2A2A2A] hover:bg-[#333] text-white px-4 py-2 rounded">取消</button>
             </div>
         </div>`;
 

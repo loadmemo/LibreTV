@@ -466,7 +466,7 @@ function initPlayer(videoUrl) {
         autoPlayback: false,
         airplay: true,
         hotkey: false,
-        theme: '#23ade5',
+        theme: '#8B5CF6',
         lang: navigator.language.toLowerCase(),
         moreVideoAttr: {
             crossOrigin: 'anonymous',
@@ -833,23 +833,23 @@ function updateButtonStates() {
 
     // 处理上一集按钮
     if (currentEpisodeIndex > 0) {
-        prevButton.classList.remove('bg-gray-700', 'cursor-not-allowed');
-        prevButton.classList.add('bg-[#222]', 'hover:bg-[#333]');
+        prevButton.classList.remove('bg-[#333]', 'cursor-not-allowed');
+        prevButton.classList.add('bg-[#2A2A2A]', 'hover:bg-[#333333]');
         prevButton.removeAttribute('disabled');
     } else {
-        prevButton.classList.add('bg-gray-700', 'cursor-not-allowed');
-        prevButton.classList.remove('bg-[#222]', 'hover:bg-[#333]');
+        prevButton.classList.add('bg-[#333]', 'cursor-not-allowed');
+        prevButton.classList.remove('bg-[#2A2A2A]', 'hover:bg-[#333333]');
         prevButton.setAttribute('disabled', '');
     }
 
     // 处理下一集按钮
     if (currentEpisodeIndex < currentEpisodes.length - 1) {
-        nextButton.classList.remove('bg-gray-700', 'cursor-not-allowed');
-        nextButton.classList.add('bg-[#222]', 'hover:bg-[#333]');
+        nextButton.classList.remove('bg-[#333]', 'cursor-not-allowed');
+        nextButton.classList.add('bg-[#2A2A2A]', 'hover:bg-[#333333]');
         nextButton.removeAttribute('disabled');
     } else {
-        nextButton.classList.add('bg-gray-700', 'cursor-not-allowed');
-        nextButton.classList.remove('bg-[#222]', 'hover:bg-[#333]');
+        nextButton.classList.add('bg-[#333]', 'cursor-not-allowed');
+        nextButton.classList.remove('bg-[#2A2A2A]', 'hover:bg-[#333333]');
         nextButton.setAttribute('disabled', '');
     }
 }
@@ -860,7 +860,7 @@ function renderEpisodes() {
     if (!episodesList) return;
 
     if (!currentEpisodes || currentEpisodes.length === 0) {
-        episodesList.innerHTML = '<div class="col-span-full text-center text-gray-400 py-8">没有可用的集数</div>';
+        episodesList.innerHTML = '<div class="col-span-full text-center text-[#808080] py-8">没有可用的集数</div>';
         return;
     }
 
@@ -875,7 +875,7 @@ function renderEpisodes() {
         html += `
             <button id="episode-${realIndex}" 
                     onclick="playEpisode(${realIndex})" 
-                    class="px-4 py-2 ${isActive ? 'episode-active' : '!bg-[#222] hover:!bg-[#333] hover:!shadow-none'} !border ${isActive ? '!border-blue-500' : '!border-[#333]'} rounded-lg transition-colors text-center episode-btn">
+                    class="px-4 py-2 rounded-lg transition-all duration-200 text-center episode-btn ${isActive ? 'episode-active' : '!bg-[#2A2A2A] hover:!bg-[#333333] !border-[rgba(255,255,255,0.08)]'}">
                 ${realIndex + 1}
             </button>
         `;
@@ -1452,7 +1452,7 @@ function renderResourceInfoBar() {
       </div>
       <button class="resource-switch-btn flex" id="switchResourceBtn" onclick="showSwitchResourceModal()">
         <span class="resource-switch-icon">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="#a67c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
         切换资源
       </button>
@@ -1478,7 +1478,7 @@ function renderResourceInfoBar() {
       </div>
       <button class="resource-switch-btn flex" id="switchResourceBtn" onclick="showSwitchResourceModal()">
         <span class="resource-switch-icon">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="#a67c2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
         切换资源
       </button>
@@ -1574,7 +1574,7 @@ async function testVideoSourceSpeed(sourceKey, vodId) {
 // 格式化速度显示
 function formatSpeedDisplay(speedResult) {
     if (speedResult.speed === -1) {
-        return `<span class="speed-indicator error">❌ ${speedResult.error}</span>`;
+        return `<span class="speed-indicator error">⚠ ${speedResult.error}</span>`;
     }
     
     const speed = speedResult.speed;
@@ -1678,7 +1678,7 @@ async function showSwitchResourceModal() {
         html += `
             <div class="relative group ${isCurrentSource ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-105 transition-transform'}" 
                  ${!isCurrentSource ? `onclick="switchToResource('${sourceKey}', '${result.vod_id}')"` : ''}>
-                <div class="aspect-[2/3] rounded-lg overflow-hidden bg-gray-800 relative">
+                <div class="aspect-[2/3] rounded-lg overflow-hidden bg-[#2A2A2A] relative">
                     <img src="${result.vod_pic}" 
                          alt="${result.vod_name}"
                          class="w-full h-full object-cover"
@@ -1690,15 +1690,15 @@ async function showSwitchResourceModal() {
                     </div>
                 </div>
                 <div class="mt-2">
-                    <div class="text-xs font-medium text-gray-200 truncate">${result.vod_name}</div>
-                    <div class="text-[10px] text-gray-400 truncate">${sourceName}</div>
-                    <div class="text-[10px] text-gray-500 mt-1">
+                    <div class="text-xs font-medium text-[#E0E0E0] truncate">${result.vod_name}</div>
+                    <div class="text-[10px] text-[#808080] truncate">${sourceName}</div>
+                    <div class="text-[10px] text-[#808080] mt-1">
                         ${speedResult.episodes ? `${speedResult.episodes}集` : ''}
                     </div>
                 </div>
                 ${isCurrentSource ? `
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="bg-blue-600 bg-opacity-75 rounded-lg px-2 py-0.5 text-xs text-white font-medium">
+                        <div class="bg-[#8B5CF6]/75 rounded-lg px-2 py-0.5 text-xs text-white font-medium">
                             当前播放
                         </div>
                     </div>

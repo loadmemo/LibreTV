@@ -111,7 +111,7 @@ function formatVersion(versionString) {
 // 创建错误版本信息元素
 function createErrorVersionElement(errorMessage) {
     const errorElement = document.createElement('p');
-    errorElement.className = 'text-gray-500 text-sm mt-1 text-center md:text-left';
+    errorElement.className = 'text-[#808080] text-sm mt-1 text-center md:text-left';
     errorElement.innerHTML = `版本: <span class="text-amber-500">检测失败</span>`;
     errorElement.title = errorMessage;
     return errorElement;
@@ -130,7 +130,7 @@ function addVersionInfoToFooter() {
         
         // 创建版本信息元素
         const versionElement = document.createElement('p');
-        versionElement.className = 'text-gray-500 text-sm mt-1 text-center md:text-left';
+        versionElement.className = 'text-[#808080] text-sm mt-1 text-center md:text-left';
         
         // 添加当前版本信息
         versionElement.innerHTML = `版本: ${result.currentFormatted}`;
@@ -170,7 +170,7 @@ function addVersionInfoToFooter() {
 // 在页脚显示版本元素的辅助函数
 function displayVersionElement(element) {
     // 获取页脚元素
-    const footerElement = document.querySelector('.footer p.text-gray-500.text-sm');
+    const footerElement = document.querySelector('.footer p') || document.querySelector('.footer .text-xs');
     if (footerElement) {
         // 在原版权信息后插入版本信息
         footerElement.insertAdjacentElement('afterend', element);

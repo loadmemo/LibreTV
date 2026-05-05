@@ -1697,11 +1697,13 @@ async function showSwitchResourceModal() {
                         <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
                     </div>
                     <div class="p-2 flex flex-col flex-grow">
-                        <h3 class="font-semibold mb-1 break-words line-clamp-2 text-sm" title="${escapeHtml(result.vod_name)}">${escapeHtml(result.vod_name)}</h3>
-                        <div class="text-xs text-gray-400 truncate mb-1">${escapeHtml(sourceName)}</div>
-                        ${speedResult.episodes ? `<div class="text-xs text-gray-500 mb-1">${speedResult.episodes} 集</div>` : ''}
-                        <div class="text-xs mb-1">${formatSpeedDisplay(speedResult)}</div>
-                        ${isCurrentSource ? `<div class="mt-1"><span class="bg-accent/80 text-white text-xs px-2 py-0.5 rounded-full">当前播放</span></div>` : ''}
+                        <h3 class="font-semibold mb-2 break-words line-clamp-2 text-sm" title="${escapeHtml(result.vod_name)}">${escapeHtml(result.vod_name)}</h3>
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="px-1.5 py-0.5 rounded bg-white/10 border border-white/10 text-[10px] text-gray-300">${escapeHtml(sourceName)}</span>
+                            ${speedResult.episodes ? `<span class="px-1.5 py-0.5 rounded bg-white/10 border border-white/10 text-[10px] text-gray-300">${speedResult.episodes} 集</span>` : ''}
+                            ${isCurrentSource ? `<span class="px-1.5 py-0.5 rounded bg-accent/80 text-white text-[10px] font-medium">当前播放</span>` : ''}
+                        </div>
+                        <div class="text-xs text-gray-400">${formatSpeedDisplay(speedResult)}</div>
                     </div>
                 </div>
             </div>

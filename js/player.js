@@ -1590,6 +1590,18 @@ function formatSpeedDisplay(speedResult) {
     return `<span class="${className}">${speed}ms${note}</span>`;
 }
 
+function getModalLoadingHtml(message = '加载中...') {
+    return `
+    <div class="flex flex-col items-center justify-center py-12 gap-4 col-span-full">
+        <div class="relative w-10 h-10">
+            <div class="absolute inset-0 rounded-full border-2 border-white/10"></div>
+            <div class="absolute inset-0 rounded-full border-2 border-t-transparent border-r-transparent border-b-indigo-400 border-l-indigo-400 animate-spin"></div>
+            <div class="absolute inset-2 rounded-full border-2 border-b-transparent border-l-transparent border-t-purple-400 border-r-purple-400 animate-spin" style="animation-direction: reverse; animation-duration: 0.8s;"></div>
+        </div>
+        <span class="text-gray-400 text-sm">${message}</span>
+    </div>`;
+}
+
 async function showSwitchResourceModal() {
     const urlParams = new URLSearchParams(window.location.search);
     const currentSourceCode = urlParams.get('source');
@@ -1600,7 +1612,7 @@ async function showSwitchResourceModal() {
     const modalContent = document.getElementById('modalContent');
 
     modalTitle.innerHTML = `<span class="break-words">${currentVideoTitle}</span>`;
-    modalContent.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;grid-column:1/-1;">正在加载资源列表...</div>';
+    modalContent.innerHTML = getModalLoadingHtml('正在加载资源列表...');
     modal.classList.remove('hidden');
 
     // 搜索
@@ -1631,7 +1643,7 @@ async function showSwitchResourceModal() {
     }));
 
     // 更新状态显示：开始速率测试
-    modalContent.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;grid-column:1/-1;">正在测试各资源速率...</div>';
+    modalContent.innerHTML = getModalLoadingHtml('正在测试各资源速率...');
 
     // 同时测试所有资源的速率
     const speedResults = {};

@@ -1579,18 +1579,15 @@ function formatSpeedDisplay(speedResult) {
     
     const speed = speedResult.speed;
     let className = 'speed-indicator good';
-    let icon = '🟢';
     
     if (speed > 2000) {
         className = 'speed-indicator poor';
-        icon = '🔴';
     } else if (speed > 1000) {
         className = 'speed-indicator medium';
-        icon = '🟡';
     }
     
     const note = speedResult.note ? ` (${speedResult.note})` : '';
-    return `<span class="${className}">${icon} ${speed}ms${note}</span>`;
+    return `<span class="${className}">${speed}ms${note}</span>`;
 }
 
 async function showSwitchResourceModal() {
@@ -1703,7 +1700,7 @@ async function showSwitchResourceModal() {
                         <h3 class="font-semibold mb-1 break-words line-clamp-2 text-sm" title="${escapeHtml(result.vod_name)}">${escapeHtml(result.vod_name)}</h3>
                         <div class="text-xs text-gray-400 truncate mb-1">${escapeHtml(sourceName)}</div>
                         ${speedResult.episodes ? `<div class="text-xs text-gray-500 mb-1">${speedResult.episodes} 集</div>` : ''}
-                        <div class="text-xs text-gray-400 mb-1">${formatSpeedDisplay(speedResult)}</div>
+                        <div class="text-xs mb-1">${formatSpeedDisplay(speedResult)}</div>
                         ${isCurrentSource ? `<div class="mt-1"><span class="bg-accent/80 text-white text-xs px-2 py-0.5 rounded-full">当前播放</span></div>` : ''}
                     </div>
                 </div>

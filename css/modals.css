@@ -451,27 +451,27 @@
 }
 
 .speed-indicator.good {
-    color: var(--color-success);
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.15);
+    color: #a8c69f !important;
+    background: rgba(168, 198, 159, 0.1);
+    border: 1px solid rgba(168, 198, 159, 0.15);
 }
 
 .speed-indicator.medium {
-    color: var(--color-warning);
-    background: rgba(245, 158, 11, 0.1);
-    border: 1px solid rgba(245, 158, 11, 0.15);
+    color: #dbc5a0 !important;
+    background: rgba(219, 197, 160, 0.1);
+    border: 1px solid rgba(219, 197, 160, 0.15);
 }
 
 .speed-indicator.poor {
-    color: var(--color-error);
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #e5b4b4 !important;
+    background: rgba(229, 180, 180, 0.1);
+    border: 1px solid rgba(229, 180, 180, 0.15);
 }
 
 .speed-indicator.error {
-    color: var(--color-error);
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #b0b0b0 !important;
+    background: rgba(176, 176, 176, 0.1);
+    border: 1px solid rgba(176, 176, 176, 0.15);
 }
 
 /* ===========================

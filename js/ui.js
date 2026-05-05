@@ -117,9 +117,14 @@ function showLoading(message = '加载中...') {
     }
 
     const loading = document.getElementById('loading');
-    const messageEl = loading.querySelector('p');
-    messageEl.textContent = message;
+    const messageEl = document.getElementById('loadingText');
+    if (messageEl) messageEl.textContent = message;
+
     loading.style.display = 'flex';
+    requestAnimationFrame(() => {
+        loading.style.opacity = '1';
+        loading.style.pointerEvents = 'auto';
+    });
 
     // 设置30秒后自动关闭loading，防止无限loading
     loadingTimeoutId = setTimeout(() => {
@@ -136,7 +141,12 @@ function hideLoading() {
     }
 
     const loading = document.getElementById('loading');
-    loading.style.display = 'none';
+    loading.style.opacity = '0';
+    loading.style.pointerEvents = 'none';
+
+    setTimeout(() => {
+        loading.style.display = 'none';
+    }, 300);
 }
 
 function updateSiteStatus(isAvailable) {

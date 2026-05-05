@@ -25,7 +25,7 @@ const API_SITES = {
     testSource: {
         api: 'https://www.example.com/api.php/provide/vod',
         name: '空内容测试源',
-        adult: true
+        adult: false
     }
     //ARCHIVE https://telegra.ph/APIs-08-12
 };
@@ -116,8 +116,7 @@ const CUSTOM_API_CONFIG = {
     validateUrl: true,        // 验证URL格式
     cacheResults: true,       // 缓存测试结果
     cacheExpiry: 5184000000,  // 缓存过期时间(2个月)
-    adultPropName: 'isAdult' // 用于标记成人内容的属性名
+
 };
 
-// 隐藏内置黄色采集站API的变量
-const HIDE_BUILTIN_ADULT_APIS = false;
+

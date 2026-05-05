@@ -397,21 +397,21 @@ h3, .h3 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-#yellowFilterToggle:checked + .toggle-bg,
+
 #adFilterToggle:checked + .toggle-bg,
 #doubanToggle:checked + .toggle-bg {
     background-color: var(--primary-color);
 }
 
-#yellowFilterToggle:checked ~ .toggle-dot,
+
 #adFilterToggle:checked ~ .toggle-dot,
 #doubanToggle:checked ~ .toggle-dot {
     transform: translateX(1.5rem);
     box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);
 }
 
-#yellowFilterToggle:focus + .toggle-bg,
-#yellowFilterToggle:hover + .toggle-bg,
+
+
 #adFilterToggle:focus + .toggle-bg,
 #adFilterToggle:hover + .toggle-bg,
 #doubanToggle:focus + .toggle-bg,
@@ -524,13 +524,9 @@ h3, .h3 {
     margin-right: 0.35rem;
 }
 
-/* ==========================================================================
-   Adult Content Markers
-   ========================================================================== */
 
-.api-adult + label {
-    color: #F472B6 !important;
-}
+
+
 
 .adult-warning {
     display: inline-flex;
@@ -570,9 +566,7 @@ h3, .h3 {
     font-weight: 600;
 }
 
-.api-group-title.adult {
-    color: #F472B6;
-}
+
 
 /* ==========================================================================
    Custom API List

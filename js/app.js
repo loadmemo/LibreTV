@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('selectedAPIs', JSON.stringify(selectedAPIs));
 
         // 默认选中过滤开关
-        localStorage.setItem('yellowFilterEnabled', 'true');
+
         localStorage.setItem(PLAYER_CONFIG.adFilteringStorage, 'true');
 
 // 默认关闭豆瓣功能
@@ -45,11 +45,7 @@ localStorage.setItem('doubanEnabled', 'false');
         localStorage.setItem('hasInitializedDefaults', 'true');
     }
 
-    // 设置黄色内容过滤器开关初始状态
-    const yellowFilterToggle = document.getElementById('yellowFilterToggle');
-    if (yellowFilterToggle) {
-        yellowFilterToggle.checked = localStorage.getItem('yellowFilterEnabled') === 'true';
-    }
+
 
     // 设置广告过滤开关初始状态
     const adFilterToggle = document.getElementById('adFilterToggle');
@@ -60,8 +56,7 @@ localStorage.setItem('doubanEnabled', 'false');
     // 设置事件监听器
     setupEventListeners();
 
-    // 初始检查成人API选中状态
-    setTimeout(checkAdultAPIsSelected, 100);
+
 
     // 来源筛选点击委托
     const sourceFiltersContainer = document.getElementById('sourceFilters');
@@ -92,7 +87,7 @@ function initAPICheckboxes() {
     // 创建普通API源的复选框
     Object.keys(API_SITES).forEach(apiKey => {
         const api = API_SITES[apiKey];
-        if (api.adult) return; // 跳过成人内容API，稍后添加
+
 
         const checked = selectedAPIs.includes(apiKey);
 
@@ -110,115 +105,17 @@ function initAPICheckboxes() {
         // 添加事件监听器
         checkbox.querySelector('input').addEventListener('change', function () {
             updateSelectedAPIs();
-            checkAdultAPIsSelected();
+
         });
     });
     container.appendChild(normaldiv);
 
-    // 添加成人API列表
-    addAdultAPI();
 
-    // 初始检查成人内容状态
-    checkAdultAPIsSelected();
 }
 
-// 添加成人API列表
-function addAdultAPI() {
-    // 仅在隐藏设置为false时添加成人API组
-    if (!HIDE_BUILTIN_ADULT_APIS && (localStorage.getItem('yellowFilterEnabled') === 'false')) {
-        const container = document.getElementById('apiCheckboxes');
 
-        // 添加成人API组标题
-        const adultdiv = document.createElement('div');
-        adultdiv.id = 'adultdiv';
-        adultdiv.className = 'grid grid-cols-2 gap-2';
-        const adultTitle = document.createElement('div');
-        adultTitle.className = 'api-group-title adult';
-        adultTitle.innerHTML = `黄色资源采集站 <span class="adult-warning">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-        </span>`;
-        adultdiv.appendChild(adultTitle);
 
-        // 创建成人API源的复选框
-        Object.keys(API_SITES).forEach(apiKey => {
-            const api = API_SITES[apiKey];
-            if (!api.adult) return; // 仅添加成人内容API
 
-            const checked = selectedAPIs.includes(apiKey);
-
-            const checkbox = document.createElement('div');
-            checkbox.className = 'flex items-center';
-            checkbox.innerHTML = `
-                <input type="checkbox" id="api_${apiKey}" 
-class="form-checkbox h-3 w-3 text-[#8B5CF6] bg-[#2A2A2A] border border-white/10 api-adult" 
-                   ${checked ? 'checked' : ''} 
-                   data-api="${apiKey}">
-                <label for="api_${apiKey}" class="ml-1 text-xs text-pink-400 truncate">${api.name}</label>
-            `;
-            adultdiv.appendChild(checkbox);
-
-            // 添加事件监听器
-            checkbox.querySelector('input').addEventListener('change', function () {
-                updateSelectedAPIs();
-                checkAdultAPIsSelected();
-            });
-        });
-        container.appendChild(adultdiv);
-    }
-}
-
-// 检查是否有成人API被选中
-function checkAdultAPIsSelected() {
-    // 查找所有内置成人API复选框
-    const adultBuiltinCheckboxes = document.querySelectorAll('#apiCheckboxes .api-adult:checked');
-
-    // 查找所有自定义成人API复选框
-    const customApiCheckboxes = document.querySelectorAll('#customApisList .api-adult:checked');
-
-    const hasAdultSelected = adultBuiltinCheckboxes.length > 0 || customApiCheckboxes.length > 0;
-
-    const yellowFilterToggle = document.getElementById('yellowFilterToggle');
-    const yellowFilterContainer = yellowFilterToggle.closest('div').parentNode;
-    const filterDescription = yellowFilterContainer.querySelector('p.filter-description');
-
-    // 如果选择了成人API，禁用黄色内容过滤器
-    if (hasAdultSelected) {
-        yellowFilterToggle.checked = false;
-        yellowFilterToggle.disabled = true;
-        localStorage.setItem('yellowFilterEnabled', 'false');
-
-        // 添加禁用样式
-        yellowFilterContainer.classList.add('filter-disabled');
-
-        // 修改描述文字
-        if (filterDescription) {
-            filterDescription.innerHTML = '<strong class="text-pink-300">选中黄色资源站时无法启用此过滤</strong>';
-        }
-
-        // 移除提示信息（如果存在）
-        const existingTooltip = yellowFilterContainer.querySelector('.filter-tooltip');
-        if (existingTooltip) {
-            existingTooltip.remove();
-        }
-    } else {
-        // 启用黄色内容过滤器
-        yellowFilterToggle.disabled = false;
-        yellowFilterContainer.classList.remove('filter-disabled');
-
-        // 恢复原来的描述文字
-        if (filterDescription) {
-            filterDescription.innerHTML = '过滤"伦理片"等黄色内容';
-        }
-
-        // 移除提示信息
-        const existingTooltip = yellowFilterContainer.querySelector('.filter-tooltip');
-        if (existingTooltip) {
-            existingTooltip.remove();
-        }
-    }
-}
 
 // 渲染自定义API列表
 function renderCustomAPIsList() {
@@ -234,19 +131,16 @@ function renderCustomAPIsList() {
     customAPIs.forEach((api, index) => {
         const apiItem = document.createElement('div');
         apiItem.className = 'flex items-center justify-between p-1 mb-1 bg-[#2A2A2A] rounded';
-        const textColorClass = api.isAdult ? 'text-pink-400' : 'text-white';
-        const adultTag = api.isAdult ? '<span class="text-xs text-pink-400 mr-1">(18+)</span>' : '';
-        // 新增 detail 地址显示
         const detailLine = api.detail ? `<div class="text-xs text-[#808080] truncate">detail: ${api.detail}</div>` : '';
         apiItem.innerHTML = `
             <div class="flex items-center flex-1 min-w-0">
                 <input type="checkbox" id="custom_api_${index}" 
-                       class="form-checkbox h-3 w-3 text-[#8B5CF6] mr-1 ${api.isAdult ? 'api-adult' : ''}" 
+                       class="form-checkbox h-3 w-3 text-[#8B5CF6] mr-1" 
                        ${selectedAPIs.includes('custom_' + index) ? 'checked' : ''} 
                        data-custom-index="${index}">
                 <div class="flex-1 min-w-0">
-                    <div class="text-xs font-medium ${textColorClass} truncate">
-                        ${adultTag}${api.name}
+                    <div class="text-xs font-medium text-white truncate">
+                        ${api.name}
                     </div>
                     <div class="text-xs text-[#808080] truncate">${api.url}</div>
                     ${detailLine}
@@ -260,7 +154,7 @@ function renderCustomAPIsList() {
         container.appendChild(apiItem);
         apiItem.querySelector('input').addEventListener('change', function () {
             updateSelectedAPIs();
-            checkAdultAPIsSelected();
+
         });
     });
 }
@@ -272,8 +166,7 @@ function editCustomApi(index) {
     document.getElementById('customApiName').value = api.name;
     document.getElementById('customApiUrl').value = api.url;
     document.getElementById('customApiDetail').value = api.detail || '';
-    const isAdultInput = document.getElementById('customApiIsAdult');
-    if (isAdultInput) isAdultInput.checked = api.isAdult || false;
+
     const form = document.getElementById('addCustomApiForm');
     if (form) {
         form.classList.remove('hidden');
@@ -291,11 +184,11 @@ function updateCustomApi(index) {
     const nameInput = document.getElementById('customApiName');
     const urlInput = document.getElementById('customApiUrl');
     const detailInput = document.getElementById('customApiDetail');
-    const isAdultInput = document.getElementById('customApiIsAdult');
+
     const name = nameInput.value.trim();
     let url = urlInput.value.trim();
     const detail = detailInput ? detailInput.value.trim() : '';
-    const isAdult = isAdultInput ? isAdultInput.checked : false;
+
     if (!name || !url) {
         showToast('请输入API名称和链接', 'warning');
         return;
@@ -306,7 +199,7 @@ function updateCustomApi(index) {
     }
     if (url.endsWith('/')) url = url.slice(0, -1);
     // 保存 detail 字段
-    customAPIs[index] = { name, url, detail, isAdult };
+    customAPIs[index] = { name, url, detail };
     localStorage.setItem('customAPIs', JSON.stringify(customAPIs));
     renderCustomAPIsList();
     checkAdultAPIsSelected();
@@ -314,7 +207,7 @@ function updateCustomApi(index) {
     nameInput.value = '';
     urlInput.value = '';
     if (detailInput) detailInput.value = '';
-    if (isAdultInput) isAdultInput.checked = false;
+
     document.getElementById('addCustomApiForm').classList.add('hidden');
     showToast('已更新自定义API: ' + name, 'success');
 }
@@ -325,8 +218,8 @@ function cancelEditCustomApi() {
     document.getElementById('customApiName').value = '';
     document.getElementById('customApiUrl').value = '';
     document.getElementById('customApiDetail').value = '';
-    const isAdultInput = document.getElementById('customApiIsAdult');
-    if (isAdultInput) isAdultInput.checked = false;
+
+
 
     // 隐藏表单
     document.getElementById('addCustomApiForm').classList.add('hidden');
@@ -376,19 +269,14 @@ function updateSelectedApiCount() {
 }
 
 // 全选或取消全选API
-function selectAllAPIs(selectAll = true, excludeAdult = false) {
+function selectAllAPIs(selectAll = true) {
     const checkboxes = document.querySelectorAll('#apiCheckboxes input[type="checkbox"]');
 
     checkboxes.forEach(checkbox => {
-        if (excludeAdult && checkbox.classList.contains('api-adult')) {
-            checkbox.checked = false;
-        } else {
-            checkbox.checked = selectAll;
-        }
+        checkbox.checked = selectAll;
     });
 
     updateSelectedAPIs();
-    checkAdultAPIsSelected();
 }
 
 // 显示添加自定义API表单
@@ -407,8 +295,8 @@ function cancelAddCustomApi() {
         document.getElementById('customApiName').value = '';
         document.getElementById('customApiUrl').value = '';
         document.getElementById('customApiDetail').value = '';
-        const isAdultInput = document.getElementById('customApiIsAdult');
-        if (isAdultInput) isAdultInput.checked = false;
+    
+    
 
         // 确保按钮是添加按钮
         restoreAddCustomApiButtons();
@@ -420,11 +308,11 @@ function addCustomApi() {
     const nameInput = document.getElementById('customApiName');
     const urlInput = document.getElementById('customApiUrl');
     const detailInput = document.getElementById('customApiDetail');
-    const isAdultInput = document.getElementById('customApiIsAdult');
+
     const name = nameInput.value.trim();
     let url = urlInput.value.trim();
     const detail = detailInput ? detailInput.value.trim() : '';
-    const isAdult = isAdultInput ? isAdultInput.checked : false;
+
     if (!name || !url) {
         showToast('请输入API名称和链接', 'warning');
         return;
@@ -437,7 +325,7 @@ function addCustomApi() {
         url = url.slice(0, -1);
     }
     // 保存 detail 字段
-    customAPIs.push({ name, url, detail, isAdult });
+    customAPIs.push({ name, url, detail });
     localStorage.setItem('customAPIs', JSON.stringify(customAPIs));
     const newApiIndex = customAPIs.length - 1;
     selectedAPIs.push('custom_' + newApiIndex);
@@ -450,7 +338,7 @@ function addCustomApi() {
     nameInput.value = '';
     urlInput.value = '';
     if (detailInput) detailInput.value = '';
-    if (isAdultInput) isAdultInput.checked = false;
+
     document.getElementById('addCustomApiForm').classList.add('hidden');
     showToast('已添加自定义API: ' + name, 'success');
 }
@@ -542,26 +430,7 @@ function setupEventListeners() {
         }
     });
 
-    // 黄色内容过滤开关事件绑定
-    const yellowFilterToggle = document.getElementById('yellowFilterToggle');
-    if (yellowFilterToggle) {
-        yellowFilterToggle.addEventListener('change', function (e) {
-            localStorage.setItem('yellowFilterEnabled', e.target.checked);
 
-            // 控制黄色内容接口的显示状态
-            const adultdiv = document.getElementById('adultdiv');
-            if (adultdiv) {
-                if (e.target.checked === true) {
-                    adultdiv.style.display = 'none';
-                } else if (e.target.checked === false) {
-                    adultdiv.style.display = ''
-                }
-            } else {
-                // 添加成人API列表
-                addAdultAPI();
-            }
-        });
-    }
 
     // 广告过滤开关事件绑定
     const adFilterToggle = document.getElementById('adFilterToggle');
@@ -877,15 +746,7 @@ async function search() {
             // 如果更新URL失败，继续执行搜索
         }
 
-        // 处理搜索结果过滤：如果启用了黄色内容过滤，则过滤掉分类含有敏感内容的项目
-        const yellowFilterEnabled = localStorage.getItem('yellowFilterEnabled') === 'true';
-        if (yellowFilterEnabled) {
-            const banned = ['伦理片', '福利', '里番动漫', '门事件', '萝莉少女', '制服诱惑', '国产传媒', 'cosplay', '黑丝诱惑', '无码', '日本无码', '有码', '日本有码', 'SWAG', '网红主播', '色情片', '同性片', '福利视频', '福利片'];
-            allResults = allResults.filter(item => {
-                const typeName = item.type_name || '';
-                return !banned.some(keyword => typeName.includes(keyword));
-            });
-        }
+
 
         allSearchResults = allResults;
         activeSourceFilter = 'all';
@@ -1396,7 +1257,7 @@ async function exportConfig() {
     const settingsToExport = [
         'selectedAPIs',
         'customAPIs',
-        'yellowFilterEnabled',
+
         'adFilteringEnabled',
         'doubanEnabled',
         'hasInitializedDefaults'

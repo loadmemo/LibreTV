@@ -1664,8 +1664,19 @@ async function showSwitchResourceModal() {
         return speedA - speedB;
     });
 
-    // 渲染资源列表
-    let html = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">';
+    // 渲染资源列表 - 使用与搜索结果页一致的卡片样式
+    let html = '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">';
+    
+    // 简单的HTML转义函数
+    const escapeHtml = (str) => {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    };
     
     for (const [sourceKey, result] of sortedResults) {
         if (!result) continue;
@@ -1675,34 +1686,27 @@ async function showSwitchResourceModal() {
         const sourceName = resourceOptions.find(opt => opt.key === sourceKey)?.name || '未知资源';
         const speedResult = speedResults[sourceKey] || { speed: -1, error: '未测试' };
         
+        // 当前播放源禁用点击，但仍然显示卡片
+        const cardClasses = `card-hover bg-[#111] rounded-lg overflow-hidden ${!isCurrentSource ? 'cursor-pointer transition-all hover:scale-[1.02]' : 'opacity-60 cursor-not-allowed'} h-full shadow-sm hover:shadow-md`;
+        
         html += `
-            <div class="relative group ${isCurrentSource ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-105 transition-transform'}" 
-                 ${!isCurrentSource ? `onclick="switchToResource('${sourceKey}', '${result.vod_id}')"` : ''}>
-                <div class="aspect-[2/3] rounded-lg overflow-hidden bg-[#2A2A2A] relative">
-                    <img src="${result.vod_pic}" 
-                         alt="${result.vod_name}"
-                         class="w-full h-full object-cover"
-                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNMjEgMTV2NGEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMnYtNCI+PC9wYXRoPjxwb2x5bGluZSBwb2ludHM9IjE3IDggMTIgMyA3IDgiPjwvcG9seWxpbmU+PHBhdGggZD0iTTEyIDN2MTIiPjwvcGF0aD48L3N2Zz4='">
-                    
-                    <!-- 速率显示在图片右上角 -->
-                    <div class="absolute top-1 right-1 speed-badge bg-black bg-opacity-75">
-                        ${formatSpeedDisplay(speedResult)}
+            <div class="${cardClasses}" ${!isCurrentSource ? `onclick="switchToResource('${sourceKey}', '${result.vod_id}')"` : ''}>
+                <div class="flex h-full">
+                    <div class="relative flex-shrink-0 w-24 h-36 search-card-img-container">
+                        <img src="${result.vod_pic}" 
+                             alt="${escapeHtml(result.vod_name)}"
+                             class="h-full w-full object-cover transition-transform hover:scale-110"
+                             onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNMjEgMTV2NGEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMnYtNCI+PC9wYXRoPjxwb2x5bGluZSBwb2ludHM9IjE3IDggMTIgMyA3IDgiPjwvcG9seWxpbmU+PHBhdGggZD0iTTEyIDN2MTIiPjwvcGF0aD48L3N2Zz4='">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
+                    </div>
+                    <div class="p-2 flex flex-col flex-grow">
+                        <h3 class="font-semibold mb-1 break-words line-clamp-2 text-sm" title="${escapeHtml(result.vod_name)}">${escapeHtml(result.vod_name)}</h3>
+                        <div class="text-xs text-gray-400 truncate mb-1">${escapeHtml(sourceName)}</div>
+                        ${speedResult.episodes ? `<div class="text-xs text-gray-500 mb-1">${speedResult.episodes} 集</div>` : ''}
+                        <div class="text-xs text-gray-400 mb-1">${formatSpeedDisplay(speedResult)}</div>
+                        ${isCurrentSource ? `<div class="mt-1"><span class="bg-accent/80 text-white text-xs px-2 py-0.5 rounded-full">当前播放</span></div>` : ''}
                     </div>
                 </div>
-                <div class="mt-2">
-                    <div class="text-xs font-medium text-[#E0E0E0] truncate">${result.vod_name}</div>
-                    <div class="text-[10px] text-[#808080] truncate">${sourceName}</div>
-                    <div class="text-[10px] text-[#808080] mt-1">
-                        ${speedResult.episodes ? `${speedResult.episodes}集` : ''}
-                    </div>
-                </div>
-                ${isCurrentSource ? `
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="bg-[#6366F1]/75 rounded-lg px-2 py-0.5 text-xs text-white font-medium">
-                            当前播放
-                        </div>
-                    </div>
-                ` : ''}
             </div>
         `;
     }

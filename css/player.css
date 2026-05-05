@@ -492,7 +492,8 @@ div.player-loading-text {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-surface-400);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: background-color 0.3s var(--ease-smooth),
                 box-shadow 0.3s var(--ease-smooth);
     border-radius: 26px;
@@ -514,9 +515,10 @@ div.player-loading-text {
 }
 
 input:checked + .slider {
-    background-color: var(--color-accent);
+    background-color: #818CF8;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1),
-                0 0 12px rgba(99, 102, 241, 0.25);
+                0 0 12px rgba(129, 140, 248, 0.5);
 }
 
 input:checked + .slider:before {

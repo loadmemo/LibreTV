@@ -23,6 +23,81 @@ Dark-cinema design system with indigo accent.
     --card-gradient-end: #1A2035;
     --card-accent: rgba(99, 102, 241, 0.12);
     --card-hover-border: rgba(99, 102, 241, 0.5);
+
+    /* === Surface Colors (Cinema Dark) === */
+    --color-surface-base: #0B0F1A;
+    --color-surface-100: #111827;
+    --color-surface-200: #1A2035;
+    --color-surface-300: #222940;
+    --color-surface-400: #2C3450;
+    --color-surface-500: #363F5C;
+
+    /* === Accent (Indigo) === */
+    --color-accent: #6366F1;
+    --color-accent-light: #818CF8;
+    --color-accent-dark: #4F46E5;
+    --color-accent-glow: rgba(99, 102, 241, 0.5);
+    --color-accent-subtle: rgba(99, 102, 241, 0.08);
+
+    /* === Text === */
+    --color-text-primary: #E2E8F0;
+    --color-text-secondary: #94A3B8;
+    --color-text-tertiary: #64748B;
+
+    /* === Semantic === */
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+
+    /* === Borders === */
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-active: rgba(255, 255, 255, 0.1);
+    --color-border-glass: rgba(255, 255, 255, 0.08);
+    --color-border-glass-hover: rgba(99, 102, 241, 0.3);
+
+    /* === Radius === */
+    --radius-sm: 6px;
+    --radius-default: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    /* === Shadows (Cinema-Grade) === */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.7);
+    --shadow-glow-accent: 0 0 12px rgba(99, 102, 241, 0.35);
+    --shadow-glow-accent-lg: 0 0 30px rgba(99, 102, 241, 0.25), 0 0 60px rgba(99, 102, 241, 0.1);
+    --shadow-player: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 80px rgba(0, 0, 0, 0.3);
+    --shadow-player-hover: 0 0 0 1px rgba(99, 102, 241, 0.15), 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 100px rgba(99, 102, 241, 0.08);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --shadow-glass-lg: 0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --shadow-inset-card: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    /* === Glass Effects === */
+    --glass-blur-sm: blur(12px);
+    --glass-blur-md: blur(24px);
+    --glass-blur-lg: blur(40px);
+    --glass-bg-subtle: rgba(11, 15, 26, 0.7);
+    --glass-bg-medium: rgba(26, 32, 53, 0.85);
+    --glass-bg-strong: rgba(26, 32, 53, 0.92);
+
+    /* === Gradients (Cinema) === */
+    --gradient-surface: linear-gradient(135deg, var(--color-surface-200), var(--color-surface-100));
+    --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    --gradient-glow: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.12), transparent 70%);
+    --gradient-player-overlay: linear-gradient(to bottom, transparent 50%, rgba(11, 15, 26, 0.4));
+    --gradient-text-cinema: linear-gradient(135deg, #E2E8F0 0%, #818CF8 50%, #6366F1 100%);
+
+    /* === Easing === */
+    --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* === Noise Texture (base64 inline SVG) === */
+    --noise-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 /* ==========================================================================

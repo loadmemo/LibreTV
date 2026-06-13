@@ -378,6 +378,7 @@ div.player-loading-text {
 }
 
 .episode-active {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light)) !important;
     background-color: var(--color-accent) !important;
     border-color: var(--color-accent) !important;
     color: #fff !important;

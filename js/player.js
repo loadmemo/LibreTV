@@ -437,6 +437,8 @@ function initPlayer(videoUrl) {
         liveDurationInfinity: false
     };
 
+    const hasMultipleEpisodes = currentEpisodes.length > 1;
+
     // Create new ArtPlayer instance
     art = new Artplayer({
         container: '#player',
@@ -471,6 +473,40 @@ function initPlayer(videoUrl) {
         moreVideoAttr: {
             crossOrigin: 'anonymous',
         },
+        controls: hasMultipleEpisodes ? [
+            {
+                name: 'prev-episode',
+                position: 'right',
+                index: 5,
+                tooltip: '上一集 (Alt+←)',
+                html: '<svg class="art-ctrl-ep-prev" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="pointer-events:none;"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>',
+                style: {
+                    color: currentEpisodeIndex > 0 ? '#E2E8F0' : '#475569',
+                    margin: '0 2px',
+                    cursor: currentEpisodeIndex > 0 ? 'pointer' : 'default',
+                    transition: 'color 0.2s',
+                },
+                click: function () {
+                    playPreviousEpisode();
+                },
+            },
+            {
+                name: 'next-episode',
+                position: 'right',
+                index: 6,
+                tooltip: '下一集 (Alt+→)',
+                html: '<svg class="art-ctrl-ep-next" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="pointer-events:none;"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>',
+                style: {
+                    color: currentEpisodeIndex < currentEpisodes.length - 1 ? '#E2E8F0' : '#475569',
+                    margin: '0 2px',
+                    cursor: currentEpisodeIndex < currentEpisodes.length - 1 ? 'pointer' : 'default',
+                    transition: 'color 0.2s',
+                },
+                click: function () {
+                    playNextEpisode();
+                },
+            },
+        ] : [],
         customType: {
             m3u8: function (video, url) {
                 // 清理之前的HLS实例
@@ -852,6 +888,29 @@ function updateButtonStates() {
         nextButton.classList.remove('bg-[#2A2A2A]', 'hover:bg-[#333333]');
         nextButton.setAttribute('disabled', '');
     }
+
+    // 同步更新 ArtPlayer 控制栏内集数按钮的样式
+    if (art) {
+        const container = art.template?.$container || art.container;
+        if (container && typeof container.querySelector === 'function') {
+            const prevSvg = container.querySelector('.art-ctrl-ep-prev');
+            const nextSvg = container.querySelector('.art-ctrl-ep-next');
+            if (prevSvg) {
+                const prevWrap = prevSvg.closest('.art-control-item');
+                if (prevWrap) {
+                    prevWrap.style.color = currentEpisodeIndex > 0 ? '#E2E8F0' : '#475569';
+                    prevWrap.style.cursor = currentEpisodeIndex > 0 ? 'pointer' : 'default';
+                }
+            }
+            if (nextSvg) {
+                const nextWrap = nextSvg.closest('.art-control-item');
+                if (nextWrap) {
+                    nextWrap.style.color = currentEpisodeIndex < currentEpisodes.length - 1 ? '#E2E8F0' : '#475569';
+                    nextWrap.style.cursor = currentEpisodeIndex < currentEpisodes.length - 1 ? 'pointer' : 'default';
+                }
+            }
+        }
+    }
 }
 
 // 渲染集数按钮
@@ -935,7 +994,11 @@ function playEpisode(index) {
     if (isWebkit) {
         initPlayer(url);
     } else {
-        art.switch = url;
+        if (art && typeof art.switch === 'function') {
+            art.switch(url);
+        } else {
+            initPlayer(url);
+        }
     }
 
     // 更新UI

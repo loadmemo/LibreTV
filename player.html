@@ -91,6 +91,27 @@
 }
     </style>
     <style>
+        :root {
+            /* === Accent (Indigo) === */
+            --color-accent: #6366F1;
+            --color-accent-light: #818CF8;
+            --color-accent-dark: #4F46E5;
+            --color-accent-glow: rgba(99, 102, 241, 0.5);
+            --color-accent-subtle: rgba(99, 102, 241, 0.08);
+
+            /* === Surface Colors === */
+            --color-surface-base: #0B0F1A;
+            --color-surface-100: #111827;
+            --color-surface-200: #1A2035;
+            --color-surface-300: #222940;
+            --color-surface-400: #2C3450;
+            --color-surface-500: #363F5C;
+
+            /* === Gradients === */
+            --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+            --shadow-glow-accent: 0 0 12px rgba(99, 102, 241, 0.35);
+        }
+
         @keyframes loading-bar {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }

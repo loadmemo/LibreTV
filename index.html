@@ -401,6 +401,36 @@
 
     <!-- Loading 动画样式 -->
     <style>
+    :root {
+        --color-surface-base: #0B0F1A;
+        --color-surface-100: #111827;
+        --color-surface-200: #1A2035;
+        --color-surface-300: #222940;
+        --color-surface-400: #2C3450;
+        --color-accent: #6366F1;
+        --color-accent-light: #818CF8;
+        --color-accent-dark: #4F46E5;
+        --color-text-primary: #E2E8F0;
+        --color-text-secondary: #94A3B8;
+        --color-text-tertiary: #64748B;
+        --color-success: #10B981;
+        --color-warning: #F59E0B;
+        --color-error: #EF4444;
+        --color-border-subtle: rgba(255, 255, 255, 0.06);
+        --color-border-active: rgba(255, 255, 255, 0.1);
+        --radius-sm: 6px;
+        --radius-default: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-full: 9999px;
+        --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+        --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+        --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.7);
+        --shadow-glow-accent: 0 0 12px rgba(99, 102, 241, 0.35);
+        --shadow-inset-card: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
     @keyframes loadingDotFade {
         0%, 60%, 100% { opacity: 0.2; }
         30% { opacity: 1; }

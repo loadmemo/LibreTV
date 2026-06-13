@@ -24,3 +24,5 @@ coverage
 *.sw?
 .env
 AGENTS.md
+.codegraph/
+.cursor/

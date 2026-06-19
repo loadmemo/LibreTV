@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import { getOutboundReferer } from './lib/proxy-referer.mjs';
 
 dotenv.config();
 
@@ -152,6 +153,10 @@ function validateProxyAuth(req) {
   return true;
 }
 
+// 根据目标 URL 决定代理请求应使用的 Referer，用于通过防盗链
+// 由 ./lib/proxy-referer.mjs 统一提供，便于与平台 serverless 函数共享
+const buildOutboundReferer = getOutboundReferer;
+
 app.get('/proxy/:encodedUrl', async (req, res) => {
   try {
     // 验证鉴权
@@ -175,7 +180,15 @@ app.get('/proxy/:encodedUrl', async (req, res) => {
     // 添加请求超时和重试逻辑
     const maxRetries = config.maxRetries;
     let retries = 0;
-    
+
+    const outboundHeaders = {
+      'User-Agent': config.userAgent,
+    };
+    const outboundReferer = buildOutboundReferer(targetUrl);
+    if (outboundReferer) {
+      outboundHeaders['Referer'] = outboundReferer;
+    }
+
     const makeRequest = async () => {
       try {
         return await axios({
@@ -183,9 +196,7 @@ app.get('/proxy/:encodedUrl', async (req, res) => {
           url: targetUrl,
           responseType: 'stream',
           timeout: config.timeout,
-          headers: {
-            'User-Agent': config.userAgent
-          }
+          headers: outboundHeaders
         });
       } catch (error) {
         if (retries < maxRetries) {

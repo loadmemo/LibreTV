@@ -3,6 +3,7 @@
 import fetch from 'node-fetch';
 import { URL } from 'url'; // 使用 Node.js 内置 URL 处理
 import crypto from 'crypto'; // 导入 crypto 模块用于密码哈希
+import { getOutboundReferer } from '../../lib/proxy-referer.mjs'; // 共享：反盗链 Referer 注入
 
 // --- 配置 (从环境变量读取) ---
 const DEBUG_ENABLED = process.env.DEBUG === 'true';
@@ -142,8 +143,8 @@ async function fetchContentWithType(targetUrl, requestHeaders) {
         'User-Agent': getRandomUserAgent(),
         'Accept': requestHeaders['accept'] || '*/*', // 传递原始 Accept 头（如果有）
         'Accept-Language': requestHeaders['accept-language'] || 'zh-CN,zh;q=0.9,en;q=0.8',
-        // 尝试设置一个合理的 Referer
-        'Referer': requestHeaders['referer'] || new URL(targetUrl).origin,
+        // 反盗链域名注入合法 Referer；其它仍透传原 referer 或回落 origin
+        'Referer': getOutboundReferer(targetUrl) || requestHeaders['referer'] || new URL(targetUrl).origin,
     };
     // 清理空值的头
     Object.keys(headers).forEach(key => headers[key] === undefined || headers[key] === null || headers[key] === '' ? delete headers[key] : {});

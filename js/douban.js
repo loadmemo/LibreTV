@@ -503,55 +503,74 @@ async function fetchDoubanData(url) {
 }
 
 // 抽取渲染豆瓣卡片的逻辑到单独函数
-function renderDoubanCards(data, container) {
+async function renderDoubanCards(data, container) {
     // 创建文档片段以提高性能
     const fragment = document.createDocumentFragment();
-    
+
     // 如果没有数据
     if (!data.subjects || data.subjects.length === 0) {
         const emptyEl = document.createElement("div");
         emptyEl.className = "col-span-full text-center py-8";
         emptyEl.innerHTML = `
             <div class="text-[#8B5CF6] flex items-center justify-center gap-2">
-                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274-4.557-5.064-7.5-9.542-7.5-4.477 0-8.268 2.943-9.542 7z"></path></svg>
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z</path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274-4.557-5.064-7.5-9.542-7.5-4.477 0-8.268-2.943-9.542 7z</svg>
                 暂无数据，请尝试其他分类或刷新
-            </div>
+           </div>
         `;
         fragment.appendChild(emptyEl);
     } else {
+        // 同步 localStorage 在首次加载（未走过密码弹窗）下为空，必须 async 拉：ProxyAuth 会一路 fallback 到 __ENV__.PASSWORD（后端注入的 sha256）
+        let proxyAuthHash = '';
+        if (window.ProxyAuth && typeof window.ProxyAuth.getPasswordHash === 'function') {
+            try {
+                proxyAuthHash = (await window.ProxyAuth.getPasswordHash()) || '';
+            } catch {}
+        }
+        const renderedTs = Date.now();
+
         // 循环创建每个影视卡片
         data.subjects.forEach(item => {
             const card = document.createElement("div");
             card.className = "group bg-[#1F1F1F] hover:bg-[#2A2A2A] transition-all duration-300 rounded-lg overflow-hidden flex flex-col transform hover:scale-[1.03] hover:-translate-y-1 shadow-md hover:shadow-lg";
-            
+
             // 生成卡片内容，确保安全显示（防止XSS）
             const safeTitle = item.title
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-            
+                .replace(/</g, '<')
+                .replace(/>/g, '>')
+                .replace(/"/g, '"');
+
             const safeRate = (item.rate || "暂无")
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
-            
+                .replace(/</g, '<')
+                .replace(/>/g, '>');
+
             // 处理图片URL
-            // 1. 直接使用豆瓣图片URL (添加no-referrer属性)
             const originalCoverUrl = item.cover;
-            
-            const proxiedCoverUrl = (() => {
-                if (!originalCoverUrl.startsWith('http://')) return '';
-                const hash = localStorage.getItem('proxyAuthHash') || '';
-                const ts = Date.now();
-                const base = `${PROXY_URL}${encodeURIComponent(originalCoverUrl)}`;
-                return hash ? `${base}?auth=${encodeURIComponent(hash)}&t=${ts}` : '';
+
+            // 已知开启 Referer 防盗链的图床域名，需经项目内 proxy 转发并由后端注入合法 Referer
+            const HOTLINK_PROTECTED_DOMAINS = ['doubanio.com', 'douban.com'];
+            const isHotlinkProtected = (() => {
+                try {
+                    const host = new URL(originalCoverUrl).hostname;
+                    return HOTLINK_PROTECTED_DOMAINS.some(d => host === d || host.endsWith('.' + d));
+                } catch {
+                    return false;
+                }
             })();
-            
+
+            const proxiedCoverUrl = (originalCoverUrl && originalCoverUrl.startsWith('http') && proxyAuthHash)
+                ? `${PROXY_URL}${encodeURIComponent(originalCoverUrl)}?auth=${encodeURIComponent(proxyAuthHash)}&t=${renderedTs}`
+                : '';
+
+            // 反盗链域名：proxy 为主，直接 URL 兜底；其他域名：直接为主，proxy 兜底
+            const primarySrc = (isHotlinkProtected && proxiedCoverUrl) ? proxiedCoverUrl : originalCoverUrl;
+            const fallbackSrc = (isHotlinkProtected && proxiedCoverUrl) ? originalCoverUrl : proxiedCoverUrl;
+
             // 为不同设备优化卡片布局
             card.innerHTML = `
                 <div class="relative w-full aspect-[2/3] overflow-hidden cursor-pointer" onclick="fillAndSearchWithDouban('${safeTitle}')">
-                    <img src="${originalCoverUrl}" alt="${safeTitle}" 
+                    <img src="${primarySrc}" alt="${safeTitle}"
                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                        ${proxiedCoverUrl ? `onerror="this.onerror=null; this.src='${proxiedCoverUrl}'; this.classList.add('object-contain');"` : ''}
+                        ${fallbackSrc ? `onerror="this.onerror=null; this.src='${fallbackSrc}'; this.classList.add('object-contain');"` : ''}
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
                     <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-sm">

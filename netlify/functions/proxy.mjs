@@ -3,6 +3,7 @@
 import fetch from 'node-fetch';
 import { URL } from 'url'; // Use Node.js built-in URL
 import crypto from 'crypto'; // 导入 crypto 模块用于密码哈希
+import { getOutboundReferer } from '../../lib/proxy-referer.mjs'; // 共享：反盗链 Referer 注入
 
 // --- Configuration (Read from Environment Variables) ---
 const DEBUG_ENABLED = process.env.DEBUG === 'true';
@@ -128,7 +129,7 @@ async function fetchContentWithType(targetUrl, requestHeaders) {
         'User-Agent': getRandomUserAgent(),
         'Accept': requestHeaders['accept'] || '*/*',
         'Accept-Language': requestHeaders['accept-language'] || 'zh-CN,zh;q=0.9,en;q=0.8',
-        'Referer': requestHeaders['referer'] || new URL(targetUrl).origin,
+        'Referer': getOutboundReferer(targetUrl) || requestHeaders['referer'] || new URL(targetUrl).origin,
     };
     Object.keys(headers).forEach(key => headers[key] === undefined || headers[key] === null || headers[key] === '' ? delete headers[key] : {});
     logDebug(`Fetching target: ${targetUrl} with headers: ${JSON.stringify(headers)}`);

@@ -991,13 +991,32 @@ function playEpisode(index) {
     currentUrl.searchParams.delete('position');
     window.history.replaceState({}, '', currentUrl.toString());
 
+    // 切换源前先退出 web 全屏，避免 ArtPlayer 在 fullscreenWeb 模式下
+    // 把内部 DOM 搬到 document.body 后 source 切换导致退出全屏按钮失效
+    const wasFullscreenWeb = !!(art && art.fullscreenWeb);
+    if (wasFullscreenWeb) {
+        art.fullscreenWeb = false;
+    }
+
     if (isWebkit) {
         initPlayer(url);
+        if (wasFullscreenWeb && art) {
+            art.fullscreenWeb = true;
+        }
+    } else if (art && typeof art.switch === 'function') {
+        const restoreFullscreenWeb = () => {
+            if (wasFullscreenWeb && art) {
+                art.fullscreenWeb = true;
+            }
+        };
+        const switchPromise = art.switch(url);
+        if (switchPromise && typeof switchPromise.then === 'function') {
+            switchPromise.then(restoreFullscreenWeb, restoreFullscreenWeb);
+        }
     } else {
-        if (art && typeof art.switch === 'function') {
-            art.switch(url);
-        } else {
-            initPlayer(url);
+        initPlayer(url);
+        if (wasFullscreenWeb && art) {
+            art.fullscreenWeb = true;
         }
     }
 
